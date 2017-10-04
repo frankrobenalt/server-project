@@ -1,0 +1,44 @@
+<!-- login/create profile info -->
+<section ng-show="showLogin">
+<input type="text" ng-model="user.username">
+<input type="password" ng-model="user.password">
+<button ng-click="findUser(user)"class="login">Log In</button>
+<!-- Navigate to home view -->
+<div>Don't have an account? - 
+<a ng-click="showCreateProfile()">Create Profile</a>
+</div>
+</section>
+
+<section ng-show="showCreate">
+    <h1>Create Profile</h1>
+    <form>
+    <input type="text" ng-model="user.username" placeholder="Create Username">
+    <input type="text" ng-model="user.password" placeholder="password">
+    <input type="text" ng-model="user.first_name" placeholder="First Name">
+    <input type="text" ng-model="user.last_name" placeholder="Last Name">
+    </form>
+    <button type="submit" ng-click="createProfile(user)">Create Profile</button>
+</section>
+
+<!-- actual profile info -->
+<section ng-show="showProfile">
+    {{currentUser.first_name}}
+    {{currentUser.last_name}}
+<h2>Goals
+<span><button ng-click="showAddGoal=true;showProfile=false">Add Goal</button></span>
+</h2>
+<div ng-repeat="goal in goals">
+    {{goal.goal}}
+</div>
+</section>
+
+
+<section ng-show="showAddGoal">
+<input type="text" ng-model="goal.goal" placeholder="Goal">
+<input type="number" max="7" ng-model="goal.timesperweek" placeholder="How many times per week?">
+<input type="number" max="10000" ng-model="goal.wager" placeholder="Wager?">
+<button type="button" ng-click="addGoal(goal)">Add Goal</button>
+</section>
+
+
+
