@@ -1,4 +1,4 @@
-<h1>Bet On You</h1>
+<h1>Goal App</h1>
 <!-- check if user has an auth id (meaning its the user and not the error message) -->
 <!-- if no authid, display error, else display user info -->
 <!-- <h1 ng-if="!user.authid">{{test}}, {{user}}!!</h1>
@@ -10,4 +10,26 @@
 <!-- <a class="transition" ui-sref="login" ng-if="!user.authid"><span>login</span></a> -->
 <!-- Logout your user, if not user, button won't display -->
 <!-- <a class="transition" href="/auth/logout" ng-if="user.authid"><span>logout!</span></a> -->
-<a ui-sref="profile">Log-In</a>
+<a ng-click="showLogin=true" ng-hide="showLogin">Log-In</a>
+<!-- login/create profile info -->
+<section ng-show="showLogin">
+        <input type="text" ng-model="user.username">
+        <input type="password" ng-model="user.password">
+        <button ng-click="login(user)"class="login">Log In</button>
+        <!-- Navigate to home view -->
+        <div>Don't have an account? - 
+        <a ng-click="showCreateProfile()">Create Profile</a>
+        </div>
+        </section>
+        
+        <section ng-show="showCreate">
+            <h1>Create Profile</h1>
+            <form>
+            <input type="text" ng-model="user.username" placeholder="Create Username">
+            <input type="text" ng-model="user.password" placeholder="password">
+            <input type="text" ng-model="user.first_name" placeholder="First Name">
+            <input type="text" ng-model="user.last_name" placeholder="Last Name">
+            </form>
+            <button type="submit" ng-click="createProfile(user)">Create Profile</button>
+        </section>
+        

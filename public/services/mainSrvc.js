@@ -1,12 +1,8 @@
 angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
     // you can use this function for every request to get user.
     // don't write new versions of this in every service, keep it DRY
-    // this.getUser = () => $http.get('/auth/me');
+    this.getUser = () => $http.get('/auth/me');
     
-    this.getUsers = () => $http.get('/api/test')
-        .then((response)=>{
-            return response;
-        });
     this.createProfile = (user) => {
         console.log(user);
         $http.post('/api/users/create', user)
@@ -25,9 +21,14 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
         });
     }
     this.findUser = (user)=>{
+        
         return $http.post('/api/login', user)
             .then((res)=>{
-              return res.data;                
+                console.log(res);
+            if (!res.data.user){
+                return 'nonono';
+            }
+              return res.data.user;                
             });
     }
 

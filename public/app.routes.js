@@ -9,11 +9,11 @@ angular.module('giftApp').config(($urlRouterProvider, $stateProvider) => {
                 url: '/',
                 templateUrl: './views/homeTmpl.html',
                 controller: 'homeCtrl',
-                // resolve: {
-                //     user: mainSrvc => mainSrvc.getUser()
-                //         .then(response => response.data)
-                //         .catch(err => err)
-                // }
+                resolve: {
+                    user: mainSrvc => mainSrvc.getUser()
+                        .then(response => response.data)
+                        .catch(err => err)
+                }
             })
             .state('createProfile', {
                 url: '/createProfile',
@@ -21,8 +21,15 @@ angular.module('giftApp').config(($urlRouterProvider, $stateProvider) => {
                 controller: 'createProfileCtrl'
             })
             .state('profile', {
-                url: '/profile/',
+                url: '/profile/:username',
                 templateUrl: './views/profileTmpl.html',
                 controller: 'profileCtrl',
+                resolve: {
+                    user: mainSrvc => mainSrvc.getUser()
+                        .then(response => {
+                            return response.data;
+                        })
+                        .catch(err => err)              
+                }
             })
     });

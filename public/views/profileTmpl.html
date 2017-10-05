@@ -1,31 +1,10 @@
-<!-- login/create profile info -->
-<section ng-show="showLogin">
-<input type="text" ng-model="user.username">
-<input type="password" ng-model="user.password">
-<button ng-click="findUser(user)"class="login">Log In</button>
-<!-- Navigate to home view -->
-<div>Don't have an account? - 
-<a ng-click="showCreateProfile()">Create Profile</a>
-</div>
-</section>
-
-<section ng-show="showCreate">
-    <h1>Create Profile</h1>
-    <form>
-    <input type="text" ng-model="user.username" placeholder="Create Username">
-    <input type="text" ng-model="user.password" placeholder="password">
-    <input type="text" ng-model="user.first_name" placeholder="First Name">
-    <input type="text" ng-model="user.last_name" placeholder="Last Name">
-    </form>
-    <button type="submit" ng-click="createProfile(user)">Create Profile</button>
-</section>
 
 <!-- actual profile info -->
 <section ng-show="showProfile">
     {{currentUser.first_name}}
     {{currentUser.last_name}}
 <h2>Goals
-<span><button ng-click="showAddGoal=true;showProfile=false">Add Goal</button></span>
+<span><button ng-click="hideCategories=false;showProfile=false">Add Goal</button></span>
 </h2>
 <div ng-repeat="goal in goals">
     {{goal.goal}}
@@ -33,12 +12,60 @@
 </section>
 
 
-<section ng-show="showAddGoal">
+<section ng-hide="hideCategories">
+    <h1>Add New Goal</h1>
+    <a ng-click="showExercise()">Exercise</a>
+    <a ng-click="showSaveMoney()">Save Dat $$</a>
+</section>
+
+<section ng-hide="hideExercise">
+<h1>Exercise Goal</h1>
+What is your exercise goal?
+<input type="text" ng-model="goal.goal" placeholder="e.g. lift, run, do yoga, etc">
+Times per week:
+<input type="number" ng-model="goal.timesperweek">
+<br>How much are you wagering on this goal?<br>$
+<input type="number" ng-model="goal.wager">
+<select>
+    <option value="daily">Daily</option>
+    <option value="weekly">Weekly</option>
+    <option value="monthly">Monthly</option>
+    <option value="afterCompletion">After Completion</option>
+</select>
+<button type="button" ng-click="addGoal(goal)">Add Goal</button>
+</section>
+
+<section ng-hide="hideSaveMoney">
+    <h1>Save Money Goal</h1>
+    What are you saving money for?
+    <input type="text" ng-model="goal.goal" placeholder="e.g. car, house, rainy day">
+    <br>How much do you want to save?<br>$
+    <input type="number" ng-model="goal.wager">
+    <select>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="paycheck">By Paycheck</option>
+            <option value="afterCompletion">Overall</option>
+    </select>
+    <button type="button" ng-click="addGoal(goal)">Add Goal</button>
+</section>
+
+<section ng-hide="hideDiet">
+        
+</section>
+        
+<section ng-hide="hideQuitHabit">
+                
+</section>
+<!-- 
+<section ng-show="showStartHabit">
+</section>
 <input type="text" ng-model="goal.goal" placeholder="Goal">
 <input type="number" max="7" ng-model="goal.timesperweek" placeholder="How many times per week?">
 <input type="number" max="10000" ng-model="goal.wager" placeholder="Wager?">
 <button type="button" ng-click="addGoal(goal)">Add Goal</button>
-</section>
+</section> -->
 
 
 

@@ -1,10 +1,34 @@
-angular.module('giftApp').controller('homeCtrl', function($scope) {
-    // user comes from resolve, will either be the user obj or error message we send from server
-    // console.log(user);
-    // // if user.data and user.data.err then user = err
-    // // else user = user object from database
-    // $scope.user = user.data && user.data.err ? user.data.err : user;
-    $scope.test = 'yoyo';
+angular.module('giftApp').controller('homeCtrl', function($scope, mainSrvc, $location, user, $timeout) {
+    
+    //if there is a user, pass them along to their profile page
+    if (!user.data){
+        $location.path('/profile/' + user.username);
+    }
 
+    $scope.showCreateProfile = ()=>{
+        $scope.showCreate = true;
+        $scope.showLogin = false;
+    }
+
+    $scope.login = (user)=>{
+        mainSrvc.findUser(user)
+            .then(response=>{
+                console.log(response);
+            if (response === 'nonono'){
+
+            } else {
+                console.log('/profile/');
+                $location.path('/profile/' + response.username);
+            }
+            });
+    }
+
+    $scope.createProfile = (user)=>{
+        console.log(user);
+        mainSrvc.createProfile(user);
+        $timeout(()=>{
+        $scope.login({username: user.username, password: user.password });
+        }, 500)
+    };
    
 })

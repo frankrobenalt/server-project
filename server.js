@@ -74,11 +74,7 @@ app.use(session({
 
 
  // General Endpoints
-app.get('/api/test', (req, res, next) => {
-    req.app.get('db').get_users().then(response => {
-        res.json(response);
-    });
-});
+
 app.post('/api/goals', (req, res, next)=>{
     console.log(req.body);
     req.app.get('db').get_goals([req.body.id]).then(response=>{
@@ -86,22 +82,9 @@ app.post('/api/goals', (req, res, next)=>{
     })
 })
 
-app.post('/api/users/create', (req, res, next)=> {
-    const db = req.app.get('db');
-   
-    const username = req.body.username;
-    const password = req.body.password;
-    const firstName = req.body.first_name;
-    const lastName = req.body.last_name;
-    db.createProfile([username, password, firstName, lastName]).then((users)=>{
-        console.log(users);
-        res.send(users);
-    });
-});
-
 app.post('/api/addGoal', (req, res, next)=>{
 const db = req.app.get('db');
-db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id])
+db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, req.body.category])
     .then((goals)=>{
         console.log(goals);
         res.json(goals);
@@ -117,16 +100,28 @@ app.post('/api/login', (req, res, next)=>{
     db.get_users().then((users)=>{
         const person = users.find(cur=>cur.username == username);
         if (!person) {
-            res.send({ validUser: false}).redirect('/login');
+            res.send({ validUser: false }).redirect('/login');
             console.log('no user');
         }
         else if (person.password != password) {
-            res.send({ validUser: false});
+            res.send({ validUser: false });
             console.log('wrong password');
         }
         req.session.user = person;
-        res.send({ validUser: true});
+        res.send({ validUser: true, user: req.session.user });
     })
+});
+
+app.post('/api/users/create', (req, res, next)=> {
+    const db = req.app.get('db');
+   
+    const username = req.body.username;
+    const password = req.body.password;
+    const firstName = req.body.first_name;
+    const lastName = req.body.last_name;
+    db.createProfile([username, password, firstName, lastName]).then((users)=>{
+        res.send(users);
+    });
 });
 
 
@@ -148,11 +143,11 @@ app.get('/auth/me', (req, res) => {
     res.status(200).json(req.session.user);
 });
 
-// // remove user from session
-app.get('/auth/logout', (req, res) => {
-    req.session.user = null;
-    res.redirect('/');
-});
+// // // remove user from session
+// app.get('/auth/logout', (req, res) => {
+//     req.session.user = null;
+//     res.redirect('/');
+// });
 
 // listen on port
 app.listen(port, ()=> {
