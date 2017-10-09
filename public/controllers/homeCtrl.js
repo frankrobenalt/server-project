@@ -5,6 +5,8 @@ angular.module('giftApp').controller('homeCtrl', function($scope, mainSrvc, $loc
         $location.path('/profile/' + user.username);
     }
 
+    
+
     $scope.showCreateProfile = ()=>{
         $scope.showCreate = true;
         $scope.showLogin = false;

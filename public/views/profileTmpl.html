@@ -7,7 +7,10 @@
 <span><button ng-click="hideCategories=false;showProfile=false">Add Goal</button></span>
 </h2>
 <div ng-repeat="goal in goals">
-    {{goal.goal}}
+    {{goal.goal}} 
+    <a ng-hide="showDetail" ng-click="showDetails(goal.goalid)">Details</a>
+    <a ng-hide="hideDetail" ng-click="hideDetails(goal.goalid)">Details</a>
+    <br>{{goal.status}} {{goal.weekly}}
 </div>
 </section>
 
@@ -22,11 +25,11 @@
 <h1>Exercise Goal</h1>
 What is your exercise goal?
 <input type="text" ng-model="goal.goal" placeholder="e.g. lift, run, do yoga, etc">
-Times per week:
-<input type="number" ng-model="goal.timesperweek">
+<input type="number" ng-model="goal.timesperweek">Times/week
+<br>End Date:<input type="date" ng-model="goal.endDate">
 <br>How much are you wagering on this goal?<br>$
 <input type="number" ng-model="goal.wager">
-<select>
+<select ng-model="goal.wager_option">
     <option value="daily">Daily</option>
     <option value="weekly">Weekly</option>
     <option value="monthly">Monthly</option>

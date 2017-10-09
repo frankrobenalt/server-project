@@ -8,6 +8,7 @@ console.log(user);
 
     mainSrvc.getGoals(user.id)
     .then(response=>{
+        console.log({Goals: response});
         $scope.goals=response.data.reverse();
     })
     
@@ -16,14 +17,18 @@ console.log(user);
     $scope.hideCategories = true;
     $scope.hideExercise = true;
     $scope.hideSaveMoney = true;
+    $scope.hideDetail = true;
 
     $scope.addGoal = (goal) =>{
         console.log(goal);
             goal.id=user.id;
+            goal.date = new Date();
             mainSrvc.addGoal(goal)
             .then(res=>{
-                console.log(res);
-                $scope.goals = res.reverse();
+                mainSrvc.getGoals(user.id)
+                .then(response=>{
+                    $scope.goals=response.data.reverse();
+                })
         })
         $scope.hideCategories = true;
         $scope.hideExercise = true;
@@ -31,6 +36,30 @@ console.log(user);
         $scope.showProfile = true;
 
         $scope.goal='';
+    }
+
+    $scope.showDetails = (id)=>{
+        $scope.hideDetail = false;
+        $scope.showDetail = true;
+        let goalidx = 0;
+        $scope.goals.map((cur, idx)=>{
+            if (cur.goalid === id){
+                goalidx = idx;
+            }
+        });
+        $scope.goals[goalidx].status = 'on pace';
+    }
+
+    $scope.hideDetails = (id)=>{
+        $scope.hideDetail = true;
+        $scope.showDetail = false;
+        let goalidx = 0;
+        $scope.goals.map((cur, idx)=>{
+            if (cur.goalid === id){
+                goalidx = idx;
+            }
+        });
+        $scope.goals[goalidx].status = null;
     }
 
     $scope.showExercise = () => {

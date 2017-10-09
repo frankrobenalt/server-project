@@ -5,6 +5,9 @@ const session = require('express-session');
 const cors = require('cors');
 const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
+const moment = require('moment');
+moment().format();
+
 
 const { secret } = require('./config').session;
 const { dbUser, dbPass, db } = require('./config').db;
@@ -84,7 +87,8 @@ app.post('/api/goals', (req, res, next)=>{
 
 app.post('/api/addGoal', (req, res, next)=>{
 const db = req.app.get('db');
-db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, req.body.category])
+console.log(req.body);
+db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, req.body.category, req.body.date, req.body.endDate, req.body.wager_option])
     .then((goals)=>{
         console.log(goals);
         res.json(goals);
@@ -92,6 +96,11 @@ db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, 
     .catch(err=>{
         console.log(err);
     })
+});
+
+app.post('/api/updateProgress', (req, res, next)=>{
+    const db = req.app.get('db');
+    db.update_progress([req.body.goal, req.body.value]);
 });
 app.post('/api/login', (req, res, next)=>{
     const username = req.body.username;
