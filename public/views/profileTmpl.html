@@ -1,16 +1,21 @@
-
+{{time}}
 <!-- actual profile info -->
 <section ng-show="showProfile">
     {{currentUser.first_name}}
     {{currentUser.last_name}}
 <h2>Goals
-<span><button ng-click="hideCategories=false;showProfile=false">Add Goal</button></span>
+<span>
+    <button ng-click="hideCategories=false;showProfile=false">Add Goal</button>
+    <button ng-click="logOut()">log out</button>
+</span>
 </h2>
 <div ng-repeat="goal in goals">
-    {{goal.goal}} 
+    {{goal.goal}} {{goal.currentStatus}}
+    <a ng-click="updateProgress({goalid: goal.goalid, value: 1})">{{goal.yes}}</a>
+    <a ng-click="updateProgress({goalid: goal.goalid, value: 0})">{{goal.no}}</a>    
     <a ng-hide="showDetail" ng-click="showDetails(goal.goalid)">Details</a>
     <a ng-hide="hideDetail" ng-click="hideDetails(goal.goalid)">Details</a>
-    <br>{{goal.status}} {{goal.weekly}}
+    <br>{{goal.status}} {{goal.wagerInfo}}
 </div>
 </section>
 
@@ -18,7 +23,7 @@
 <section ng-hide="hideCategories">
     <h1>Add New Goal</h1>
     <a ng-click="showExercise()">Exercise</a>
-    <a ng-click="showSaveMoney()">Save Dat $$</a>
+    <a ng-click="showSaveMoney()">Save $$</a>
 </section>
 
 <section ng-hide="hideExercise">
@@ -30,10 +35,10 @@ What is your exercise goal?
 <br>How much are you wagering on this goal?<br>$
 <input type="number" ng-model="goal.wager">
 <select ng-model="goal.wager_option">
-    <option value="daily">Daily</option>
-    <option value="weekly">Weekly</option>
-    <option value="monthly">Monthly</option>
-    <option value="afterCompletion">After Completion</option>
+    <option value="day">Daily</option>
+    <option value="week">Weekly</option>
+    <option value="month">Monthly</option>
+    <option value="overall">After Completion</option>
 </select>
 <button type="button" ng-click="addGoal(goal)">Add Goal</button>
 </section>
@@ -42,14 +47,16 @@ What is your exercise goal?
     <h1>Save Money Goal</h1>
     What are you saving money for?
     <input type="text" ng-model="goal.goal" placeholder="e.g. car, house, rainy day">
-    <br>How much do you want to save?<br>$
-    <input type="number" ng-model="goal.wager">
-    <select>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="paycheck">By Paycheck</option>
-            <option value="afterCompletion">Overall</option>
+    <br>I need to save $<input type="number" ng-model="goal.totalSavings">
+    <br>By <input type="date" ng-model="goal.end_date">
+    <br>Installments:
+    <input type="number" ng-model="goal.wager" placeholder="{{}}"> per
+    <select ng-model="goal.wager_option">
+            <option value="day">Day</option>
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+            <option value="paycheck">Paycheck</option>
+            <option value="overall">Overall</option>
     </select>
     <button type="button" ng-click="addGoal(goal)">Add Goal</button>
 </section>

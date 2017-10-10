@@ -6,7 +6,6 @@ const cors = require('cors');
 const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const moment = require('moment');
-moment().format();
 
 
 const { secret } = require('./config').session;
@@ -78,20 +77,35 @@ app.use(session({
 
  // General Endpoints
 
+ const now = moment().format();
+
 app.post('/api/goals', (req, res, next)=>{
-    console.log(req.body);
+    //console.log(req.body);
     req.app.get('db').get_goals([req.body.id]).then(response=>{
+        //console.log(response);
+        response.map(cur=>{
+            if (moment(now).diff(cur.last_log, 'hours')>24){
+                cur.last_log = null;
+            }
+        });
         res.json(response);
     })
 })
 
 app.post('/api/addGoal', (req, res, next)=>{
 const db = req.app.get('db');
-console.log(req.body);
-db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, req.body.category, req.body.date, req.body.endDate, req.body.wager_option])
+
+
+let diff = (moment(req.body.endDate).diff(now, 'weeks', true)).toFixed(1);
+if (diff < 1.4) {
+    diff = moment(req.body.endDate).diff(now, 'days') + ' days';
+} else {
+    diff += ' weeks';
+}
+db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, req.body.category, moment().format(), req.body.endDate, req.body.wager_option, req.body.totalSavings])
     .then((goals)=>{
-        console.log(goals);
-        res.json(goals);
+        //console.log(goals);
+        res.json({goals: goals, diff: diff});
     })
     .catch(err=>{
         console.log(err);
@@ -100,8 +114,9 @@ db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, 
 
 app.post('/api/updateProgress', (req, res, next)=>{
     const db = req.app.get('db');
-    db.update_progress([req.body.goal, req.body.value]);
+    db.update_progress([req.body.goalid, true, req.body.value, moment().format()]).then(()=>res.json('yo'));
 });
+
 app.post('/api/login', (req, res, next)=>{
     const username = req.body.username;
     const password = req.body.password;

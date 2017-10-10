@@ -17,20 +17,24 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
     this.addGoal = (goal) => {
         return $http.post('/api/addGoal', goal)
         .then(res=>{
+            console.log(res);
             return res.data;
         });
     }
+
+    this.updateProgress = (progress)=>{
+        return $http.post('/api/updateProgress', progress).then(res=>res);
+    }
+
     this.findUser = (user)=>{
         
         return $http.post('/api/login', user)
             .then((res)=>{
-                console.log(res);
             if (!res.data.user){
                 return 'nonono';
             }
               return res.data.user;                
             });
     }
-
 
 });

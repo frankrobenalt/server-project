@@ -1,5 +1,10 @@
-angular.module('giftApp').config(($urlRouterProvider, $stateProvider) => {
-    
+angular.module('giftApp').config(($urlRouterProvider, $stateProvider, $momentProvider) => {
+        
+        $momentProvider
+        .asyncLoading(false)
+        .scriptUrl('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js');
+        
+
         $urlRouterProvider.otherwise('/');
     
         // in the resolve, request the user, if no user, catcth the error (401, 404, etc.);

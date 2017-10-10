@@ -1,1 +1,1 @@
-angular.module("giftApp", ['ui.router']);
+angular.module("giftApp", ['ui.router', 'angular-momentjs']);
