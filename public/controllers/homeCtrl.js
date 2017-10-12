@@ -1,10 +1,13 @@
 angular.module('giftApp').controller('homeCtrl', function($scope, mainSrvc, $location, user, $timeout) {
-    
+    $scope.goalDropdown = false;
+    $scope.dropdown=()=>{
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
     //if there is a user, pass them along to their profile page
-    // if (!user.data){
-    //     $location.path('/profile/' + user.username);
-    // }
-
+    if (!user.data){
+        $location.path('/profile/' + user.username);
+    }
+    $scope.showLogin = true;
     
 
     $scope.showCreateProfile = ()=>{
@@ -29,5 +32,5 @@ angular.module('giftApp').controller('homeCtrl', function($scope, mainSrvc, $loc
         $scope.login({username: user.username, password: user.password });
         }, 500)
     };
-   
+    
 })

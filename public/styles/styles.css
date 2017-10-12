@@ -1,0 +1,187 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
+}
+
+/* fonts
+
+font-family: 'Raleway', sans-serif;
+font-family: 'Lora', serif;
+font-family: 'Indie Flower', cursive;
+font-family: 'Permanent Marker', cursive;
+font-family: 'Bangers', cursive;
+font-family: 'Playball', cursive; */
+
+/* login */
+
+.loginWrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+}
+.loginWrapper input {
+    text-align: center;
+    margin: 10px;
+}
+
+/* nav */
+
+.nav {
+    width: 96vw;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    background-color: rgb(46, 76, 49);
+}
+.nav h2 {
+    margin: auto;
+}
+
+/* profile header */
+
+.profileHeader {
+    margin: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+}
+h1 {
+    margin: 10px;
+    color: rgba(182, 182, 182, 0.76);
+    font-size: 2rem;
+}
+
+/* add goal */
+
+.addGoal {
+    text-align: center; 
+}
+
+/* exercise */
+
+.goalInput {
+    height: 80vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    text-align: center;
+}
+.goalInput h2 {
+    margin: 10px;
+}
+.basicInfo div{
+    margin: 10px;
+}
+
+/* goals */
+
+.profileContainer {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+.statusImg {
+    height: 38px;
+    width: 38px;
+}
+.logButtons img{
+    height: 38px;
+    width: 38px;
+}
+.goalsWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 96vw;
+}
+.goalWrapper {
+    width: 96vw;
+    margin-bottom:0px;
+}
+.goal {
+    font-size: 1.5em;
+    width: 96vw;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #D7D7D7;
+    border-bottom: 1px solid #D7D7D7;
+}
+.title {
+    align-self: center;
+}
+.small {
+    font-size: 1rem;
+}
+.medium {
+    font-size: 1.5rem;
+}
+.large {
+    font-size: 2rem;
+}
+.inline {
+    display: flex;
+    justify-content: space-around;
+    width: 96vw;
+}
+.wager {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.goalInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 96vw;
+    display: flex;
+    padding: 10px;
+    background-color: #F2F2F2;    
+}
+table {
+    border-spacing: 10px;
+}
+table img {
+    width:45px;
+    margin: auto;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+.show {display:block;}

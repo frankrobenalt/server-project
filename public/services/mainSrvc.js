@@ -14,11 +14,24 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
             return res;
         })
     }
+    this.getLogs = (id) =>{
+        return $http.post('/api/getLogs', {id: id})
+        .then(res=>{
+            return res;
+        })
+    } 
     this.addGoal = (goal) => {
         return $http.post('/api/addGoal', goal)
         .then(res=>{
             console.log(res);
             return res.data;
+        });
+    }
+
+    this.deleteGoal = (id)=>{
+        return $http.post('/api/deleteGoal', {id: id})
+        .then(res=>{
+            return res;
         });
     }
 
@@ -35,6 +48,10 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
             }
               return res.data.user;                
             });
+    }
+
+    this.logOut = ()=>{
+        return $http.get('/logout');
     }
 
 });

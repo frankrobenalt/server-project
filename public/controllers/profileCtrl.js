@@ -1,5 +1,12 @@
 angular.module('giftApp').controller('profileCtrl', function($scope, $moment, mainSrvc, $stateParams, user, $location){
+    
+    angular.element(document).ready(function(){
+
+   
+    });
+    
     let now = $moment().format();
+    $scope.goalDropdown = false;
 
     if (user.data){
         $location.path('/')
@@ -8,21 +15,37 @@ angular.module('giftApp').controller('profileCtrl', function($scope, $moment, ma
 
     mainSrvc.getGoals(user.id)
     .then(response=>{
-        console.log({Goals: response});
-        $scope.goals=response.data.reverse();
-        $scope.goals.map((cur, idx)=>{
-            cur.yes = 'yes';
-            cur.no = 'no';
-            if (cur.category === "save money" || cur.last_log){
-                cur.yes = null;
-                cur.no = null;
+        $scope.exerciseGoals=response.data;
+        $scope.exerciseGoals.map((cur, idx)=>{
+            if (cur.logged_today === false){cur.image = '../images/questionmark.gif'}
+            if (cur.logged_today === true){
+                if (cur.log_value === true){
+                    cur.image = '../images/check.gif';
+                } else {
+                    cur.image='../images/x.gif'
+                }
+            }    
+            if (cur.category === "save money"){
+              cur.logged_today = true;
+              cur.no_cal = true;
             }
             if (cur.timesperweek){cur.currentStatus = cur.progress + "/7"}
-            else {
-                
-            }
+            mainSrvc.getLogs(cur.goalid).then(res=>{
+                cur.log_data=res.data;
+                cur.log_data.map((current, idx)=>{
+                    if (current === true){
+                        cur.log_data[idx] = '../images/check.gif';
+                    }
+                    else if (current === false){
+                        cur.log_data[idx] = '../images/x.gif';
+                    }
+                    else {cur.log_data[idx] = '../images/questionmark.gif'}
+                })
+                })
+            })
+            console.log($scope.exerciseGoals);
+            
         });
-    })
     
     //ng-show initial values
     $scope.showProfile = true;
@@ -32,13 +55,41 @@ angular.module('giftApp').controller('profileCtrl', function($scope, $moment, ma
     $scope.hideDetail = true;
 
     $scope.addGoal = (goal) =>{
-        console.log(goal);
+        //console.log(goal);
             goal.id = user.id;
             mainSrvc.addGoal(goal)
             .then(res=>{
                 mainSrvc.getGoals(user.id)
                 .then(response=>{
-                    $scope.goals=response.data.reverse();
+                    console.log({Goals: response});
+                    $scope.exerciseGoals=response.data;
+                    $scope.exerciseGoals.map((cur, idx)=>{
+                        if (cur.logged_today === false){cur.image = '../images/questionmark.gif'}
+                        if (cur.logged_today === true){
+                            if (cur.log_value === true){
+                                cur.image = '../images/check.gif';
+                            } else {
+                                cur.image='../images/x.gif'
+                            }
+                        }    
+                        if (cur.category === "save money"){
+                            cur.logged_today = true;
+                        }
+                        if (cur.timesperweek){cur.currentStatus = cur.progress + "/7"}
+                        mainSrvc.getLogs(cur.goalid).then(res=>{
+                            cur.log_data=res.data;
+                            cur.log_data.map((current, idx)=>{
+                                console.log(current);
+                                if (current === true){
+                                    cur.log_data[idx] = '../images/check.gif';
+                                }
+                                else if (current === false){
+                                    cur.log_data[idx] = '../images/x.gif';
+                                }
+                                else {cur.log_data[idx] = '../images/questionmark.gif'}
+                            })
+                            })
+                    });
                 })
         })
         $scope.hideCategories = true;
@@ -49,32 +100,44 @@ angular.module('giftApp').controller('profileCtrl', function($scope, $moment, ma
         $scope.goal='';
     }
 
-    $scope.showDetails = (id)=>{
-        $scope.hideDetail = false;
-        $scope.showDetail = true;
-        $scope.currentGoal;
-        $scope.goals.map((cur, idx)=>{
-            if (cur.goalid === id){
-                $scope.currentGoal = cur;
-            }
-        });
-        if ($scope.currentGoal.category === "exercise"){
-            $scope.currentGoal.wagerInfo = "You wagered $" + $scope.currentGoal.wager + " per " + $scope.currentGoal.wager_option + " on this goal.";
-        } else if ($scope.currentGoal.category === "save money"){
-            $scope.currentGoal.wagerInfo = "You pledged to save $" + $scope.currentGoal.wager + " per " + $scope.currentGoal.wager_option;
-        }
-    }
-
-    $scope.hideDetails = (id)=>{
-        $scope.hideDetail = true;
-        $scope.showDetail = false;
-        $scope.currentGoal;
-        $scope.goals.map((cur, idx)=>{
-            if (cur.goalid === id){
-                $scope.currentGoal = cur;
-            }
-        });
-        $scope.currentGoal.wagerInfo = null;
+    $scope.deleteGoal = (id)=>{
+       // console.log(id);
+        mainSrvc.deleteGoal(id)
+            .then((res)=>{                
+                mainSrvc.getGoals(user.id)
+                .then(response=>{
+                    $scope.exerciseGoals=response.data;
+                    $scope.exerciseGoals.map((cur, idx)=>{
+                        if (cur.logged_today === false){cur.image = '../images/questionmark.gif'}
+                        if (cur.logged_today === true){
+                            if (cur.log_value === true){
+                                cur.image = '../images/check.gif';
+                            } else {
+                                cur.image='../images/x.gif'
+                            }
+                        }    
+                        if (cur.category === "save money"){
+                          cur.logged_today = true;
+                          cur.no_cal = true;
+                        }
+                        if (cur.timesperweek){cur.currentStatus = cur.progress + "/7"}
+                        mainSrvc.getLogs(cur.goalid).then(res=>{
+                            cur.log_data=res.data;
+                            cur.log_data.map((current, idx)=>{
+                                if (current === true){
+                                    cur.log_data[idx] = '../images/check.gif';
+                                }
+                                else if (current === false){
+                                    cur.log_data[idx] = '../images/x.gif';
+                                }
+                                else {cur.log_data[idx] = '../images/questionmark.gif'}
+                            })
+                            })
+                        })
+                       // console.log($scope.goals);
+                        
+                    });
+            })
     }
 
     $scope.updateProgress = (progress)=>{
@@ -82,16 +145,34 @@ angular.module('giftApp').controller('profileCtrl', function($scope, $moment, ma
         .then(res => {
             mainSrvc.getGoals(user.id)
             .then(response=>{
-                console.log({Goals: response});
-                $scope.goals=response.data;
+                console.log({Goals: response.data});
+                $scope.exerciseGoals=response.data;
                 $scope.goals.map((cur, idx)=>{
-                    cur.yes = 'yes';
-                    cur.no = 'no';
-                    if (progress.goalid === cur.goalid || cur.category === "save money"){
-                        cur.yes = null;
-                        cur.no = null;
-                    }
+                    if (cur.logged_today === false){cur.image = '../images/questionmark.gif'}
+                    if (cur.logged_today === true){
+                        if (cur.log_value === true){
+                            cur.image = '../images/check.gif';
+                        } else {
+                            cur.image='../images/x.gif'
+                        }
+                    }    
+                    if (cur.category === "save money"){
+                        cur.logged_today = true;
+                      }
                     if (cur.timesperweek){cur.currentStatus = cur.progress + "/7"}
+                    mainSrvc.getLogs(cur.goalid).then(res=>{
+                        cur.log_data=res.data;
+                        cur.log_data.map((current, idx)=>{
+                            //console.log(current);
+                            if (current === true){
+                                cur.log_data[idx] = '../images/check.gif';
+                            }
+                            else if (current === false){
+                                cur.log_data[idx] = '../images/x.gif';
+                            }
+                            else {cur.log_data[idx] = '../images/questionmark.gif'}
+                        })
+                        })
                 
                 });
             })
@@ -111,8 +192,13 @@ angular.module('giftApp').controller('profileCtrl', function($scope, $moment, ma
         $scope.goal = {category: 'save money'};
     }
 
+    $scope.dropdown=()=>{
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
     $scope.logOut = ()=>{
-        $location.path('/');
+        mainSrvc.logOut().then(res=>{
+            $location.path('/');            
+        });
     }
    
 });

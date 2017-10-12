@@ -80,41 +80,70 @@ app.use(session({
  const now = moment().format();
 
 app.post('/api/goals', (req, res, next)=>{
-    //console.log(req.body);
-    req.app.get('db').get_goals([req.body.id]).then(response=>{
-        //console.log(response);
+
+    const db = req.app.get('db');
+    db.get_goals([req.body.id]).then(response=>{
+        //console.log(rsponse);
         response.map(cur=>{
+            cur.wager_goal = 'Goal: ' + cur.timesperweek + '/7';
+                cur.time_left = (moment(cur.end_date).diff(now, 'weeks', true)).toFixed(1);
+                if (cur.time_left < 1.4) {
+                    cur.time_left = (moment(cur.end_date).diff(now, 'days')).toFixed(1);
+                    if (cur.time_left <= 1){
+                        cur.time_left = (moment(cur.end_date).diff(now, 'hours')).toFixed(1) + ' hours left';
+                    } else {cur.time_left += ' days left'}
+                } else {
+                    cur.time_left += ' weeks left';
+                }   
+
+            if (cur.time_left === 'NaN days left' || cur.time_left === 'NaN weeks left'){cur.time_left = null};
             if (moment(now).diff(cur.last_log, 'hours')>24){
-                cur.last_log = null;
+                cur.logged_today = false;
             }
         });
         res.json(response);
     })
 })
 
-app.post('/api/addGoal', (req, res, next)=>{
-const db = req.app.get('db');
-
-
-let diff = (moment(req.body.endDate).diff(now, 'weeks', true)).toFixed(1);
-if (diff < 1.4) {
-    diff = moment(req.body.endDate).diff(now, 'days') + ' days';
-} else {
-    diff += ' weeks';
-}
-db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, req.body.category, moment().format(), req.body.endDate, req.body.wager_option, req.body.totalSavings])
-    .then((goals)=>{
-        //console.log(goals);
-        res.json({goals: goals, diff: diff});
+app.post('/api/getLogs', (req, res, next)=>{
+    const db = req.app.get('db');
+    db.get_logs([req.body.id]).then(response=>{
+        //console.log(response);
+        if (!response[0]){
+            res.json([null, null, null,null,null,null,null]);
+        } else {
+        res.json([response[0].sunday,response[0].monday,response[0].tuesday,response[0].wednesday,response[0].thursday,response[0].friday,response[0].saturday]);
+        }
     })
-    .catch(err=>{
-        console.log(err);
-    })
+});
+
+app.post('/api/addExerciseGoal', (req, res, next)=>{
+    const db = req.app.get('db');
+    db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, req.body.category, moment().format(), req.body.endDate, req.body.wager_option, req.body.totalSavings])
+        .then((goals)=>{
+            //console.log(goals);
+            res.json({goals: goals});
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+});
+
+app.post('/api/deleteGoal', (req, res, next)=>{
+    const db = req.app.get('db');
+    db.delete_goal([req.body.id]).then(resp=>{
+        res.json(resp);
+    });
 });
 
 app.post('/api/updateProgress', (req, res, next)=>{
     const db = req.app.get('db');
-    db.update_progress([req.body.goalid, true, req.body.value, moment().format()]).then(()=>res.json('yo'));
+    if (!req.body.comments){
+        req.body.comments = 'none';
+    }
+    db.add_log([req.body.goalid, moment().format(), req.body.sof, req.body.comments]).then(()=>{
+    db.update_progress([req.body.goalid, req.body.sof, req.body.value, moment().format()]).then(()=>res.json('yo'))
+    });
 });
 
 app.post('/api/login', (req, res, next)=>{
@@ -134,6 +163,11 @@ app.post('/api/login', (req, res, next)=>{
         req.session.user = person;
         res.send({ validUser: true, user: req.session.user });
     })
+});
+
+app.get('/logout', (req, res, next)=>{
+    req.session.user = null;
+    res.redirect('/');
 });
 
 app.post('/api/users/create', (req, res, next)=> {

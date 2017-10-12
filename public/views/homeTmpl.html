@@ -1,35 +1,34 @@
-<h1>Goal App</h1>
-<!-- check if user has an auth id (meaning its the user and not the error message) -->
-<!-- if no authid, display error, else display user info -->
-<!-- <h1 ng-if="!user.authid">{{test}}, {{user}}!!</h1>
-<div ng-if="user.authid">
-    <h1>{{user.authid}}</h1>
-    <h1>{{user.username}}</h1>
-</div> -->
-<!-- Go to Login View -->
-<!-- <a class="transition" ui-sref="login" ng-if="!user.authid"><span>login</span></a> -->
-<!-- Logout your user, if not user, button won't display -->
-<!-- <a class="transition" href="/auth/logout" ng-if="user.authid"><span>logout!</span></a> -->
-<a ng-click="showLogin=true" ng-hide="showLogin">Log-In</a>
+<section class="nav">
+        <div class="dropdown">
+            <i class="fa fa-align-justify fa-2x" ng-click="dropdown()" aria-hidden="true"></i>
+            <div id="myDropdown" class="dropdown-content">
+                <a ng-click="logOut()">Log In</a>
+            </div>
+        </div>
+        <h2>GoalBank</h2>
+</section>
+
 <!-- login/create profile info -->
-<section ng-show="showLogin">
-        <input type="text" ng-model="user.username">
-        <input type="password" ng-model="user.password">
-        <button ng-click="login(user)"class="login">Log In</button>
+<section>
+    <div class="loginWrapper" ng-show="showLogin">
+        <input type="text" ng-model="user.username" placeholder="username">
+        <input type="password" ng-model="user.password" placeholder="password">
+        <a ng-click="login(user)"class="login">Log In</a>
         <!-- Navigate to home view -->
         <div>Don't have an account? - 
         <a ng-click="showCreateProfile()">Create Profile</a>
         </div>
-        </section>
+    </div>
+</section>
         
-        <section ng-show="showCreate">
-            <h1>Create Profile</h1>
-            <form>
-            <input type="text" ng-model="user.username" placeholder="Create Username">
-            <input type="text" ng-model="user.password" placeholder="password">
-            <input type="text" ng-model="user.first_name" placeholder="First Name">
-            <input type="text" ng-model="user.last_name" placeholder="Last Name">
-            </form>
-            <button type="submit" ng-click="createProfile(user)">Create Profile</button>
-        </section>
+<section class="login" ng-show="showCreate">
+    <h1>Create Profile</h1>
+    <form>
+    <input type="text" ng-model="user.username" placeholder="Create Username">
+    <input type="text" ng-model="user.password" placeholder="password">
+    <input type="text" ng-model="user.first_name" placeholder="First Name">
+    <input type="text" ng-model="user.last_name" placeholder="Last Name">
+    </form>
+    <a type="submit" ng-click="createProfile(user)">Create Profile</a>
+</section>
         
