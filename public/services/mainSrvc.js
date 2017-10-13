@@ -21,10 +21,20 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
         })
     } 
     this.addGoal = (goal) => {
-        return $http.post('/api/addGoal', goal)
+        return $http.post('/api/addExerciseGoal', goal)
         .then(res=>{
-            console.log(res);
             return res.data;
+        });
+    }
+    this.addSavingsGoal = (goal)=>{
+        return $http.post('/api/addSavingsGoal', goal)
+        .then(res=>{
+            return res.data;
+        });
+    }
+    this.addSavings = (addition)=>{
+        return $http.post('/api/addSavings', addition).then(res=>{
+            return res;
         });
     }
 
@@ -34,9 +44,21 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
             return res;
         });
     }
+    this.deleteSavingsGoal = (id)=>{
+        return $http.post('/api/deleteSavingsGoal', {id: id})
+        .then(res=>{
+            return res;
+        });
+    }
 
     this.updateProgress = (progress)=>{
         return $http.post('/api/updateProgress', progress).then(res=>res);
+    }
+    this.updateDate = (update)=>{
+        return $http.post('/api/updateDate', update)
+        .then(response=>{
+            return response;
+        });
     }
 
     this.findUser = (user)=>{

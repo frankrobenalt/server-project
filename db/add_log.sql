@@ -1,1 +1,1 @@
-INSERT INTO goal_logs (goalid, log_date, log_value, log_comments) VALUES ($1, $2, $3, $4);
+INSERT INTO goal_logs (goalid, log_date, log_value, log_comments, first_day) VALUES ($1, $2, $3, $4, $5);

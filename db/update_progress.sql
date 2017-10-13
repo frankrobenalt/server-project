@@ -1,4 +1,4 @@
-UPDATE goals
+UPDATE exercise_goals
 SET progress = progress + $3,
 logged_today = true,
 log_value = $2,

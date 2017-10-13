@@ -1,0 +1,1 @@
+DELETE FROM savings WHERE id = $1;

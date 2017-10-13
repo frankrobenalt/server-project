@@ -13,16 +13,19 @@
 
 <section class="profileContainer"ng-show="showProfile">
     <div class="profileHeader">
-        <h3>{{currentUser.first_name}}'s Goals</h3>
-        <i class="fa fa-plus-square-o fa-2x" ng-click="hideCategories=false;showProfile=false"aria-hidden="true"></i>
+        <div class="inlineboi">
+        <h1>Goals</h1><i class="fa fa-plus-square-o fa-2x" ng-click="hideCategories=false;showProfile=false"aria-hidden="true"></i>
+        </div>
+        <h3>{{currentUser.first_name}} {{currentUser.last_name}}</h3>
     </div>
+    
 <!-- goals -->
 
-<div class="goalsWrapper">
+<div class="goalsWrapper" ng-hide="hideExGoals">
     <h1>Exercise</h1>
     <div class="goalWrapper" ng-repeat="goal in exerciseGoals track by goal.goalid">
-        <div class="goal">
-            <img class="statusImg" ng-src="{{goal.image}}">
+        <div class="goal" ng-hide="goalModal">
+            <img class="statusImg" ng-click="goalModal=true"ng-src="{{goal.image}}">
             <div class="title">{{goal.goal}}</div> 
             <div ng-hide="goal.logged_today" class="logButtons">
                 <img src="../images/check.gif" ng-click="updateProgress({goalid: goal.goalid, sof: true, value: 1})" >
@@ -32,14 +35,26 @@
             </div>
             <div class="status" ng-show="goal.logged_today">
                 <p class="small">This week:</p>
-                <p>{{goal.currentStatus}}</p>
+                <p>{{goal.progress}}/{{goal.timesperweek}}</p>
             </div>
             <i ng-click="goalDropdown = true" ng-hide="goalDropdown" class="fa fa-chevron-down" aria-hidden="true"></i>         
-            <i class="fa fa-chevron-up" ng-click="goalDropdown = false" ng-show="goalDropdown" aria-hidden="true"></i>        
+            <i class="fa fa-chevron-up" ng-click="goalDropdown = false" ng-show="goalDropdown" aria-hidden="true"></i>       
         </div>
+            <div class="goal" ng-show="goalModal">
+                <img class="statusImg" ng-src="{{goal.image}}">
+                <div class="small">Change today's log?</div>
+                <div class="logButtons">
+                <img src="../images/check.gif" ng-click="goalModal=false;updateProgress({goalid: goal.goalid, sof: true, value: 1})" >
+                <img src="../images/x.gif" ng-click="goalModal=false;updateProgress({goalid: goal.goalid, sof: false, value: -1})" > 
+                </div>
+                <i class="fa fa-window-close-o" ng-click="goalModal=false" aria-hidden="true"></i>
+            </div> 
             <div class="goalInfo" ng-show="goalDropdown">
-                    <span class="small">This week's logs</span>
-                    <table class="cal" ng-hide="goal.no_cal">
+                <div class="small inline">    
+                <span class="title">This week's logs</span>
+  
+                </div>
+                    <table class="cal">
                             <thead>
                                 <tr>
                                     <th>Sun</th>
@@ -53,35 +68,88 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                 <td id="day" ng-repeat="day in goal.log_data track by $index"><img ng-src='{{day}}'></td>
+                                 <td id="day" ng-repeat="day in goal.log_data track by $index" ><a ng-click="goalMod({index: $index, goal: goal})"><img ng-src='{{day}}'></a></td>
                                 </tr>
+                                <!-- <tr><td ng-repeat="day in goal.log_data track by $index"><p ng-click="goalModal=true">update</p></td></tr> -->
                             </tbody>
                     </table>
                 <div class="inline">
                     <div class="status">
-                            <p class="small">This week:</p>
-                            <p>{{goal.currentStatus}}</p>
-                            <p>{{goal.wager_goal}}</p>
+                            <p>This week: <div class="inlineboi"><div class="number">{{goal.progress}}/{{goal.timesperweek}}</div></div></p>                            
+                            <div class="inlineboi"><p>Goal: <div class="number">{{goal.timesperweek}} </div> times/week</div></p>
                     </div>
                     <div class="wager">
-                    Wager: ${{goal.wager}}/{{goal.wager_option}}
-                        <span class="timeLeft">
+                    <div>Wager: </div><div class="number">${{goal.wager}}/{{goal.wager_option}}</div>
+                    <span class="timeLeft">
                             {{goal.time_left}}
-                        </span>
+                    </span>
                     </div>
                 </div>
-                <span class="small"><a ng-click="deleteGoal(goal.goalid)">Delete</a></span>                
+                <span class="small"><a ng-click="deleteGoal(goal.goalid)">Delete Goal</a></span>                
             </div>
     </div>
 </div>
-</section>
+<!-- modify goal by day modal -->
+<div class="goalModalWrapper" ng-show="modifyDay">
+<div class="modifyDay">
+        <h2>{{clickedDate | date: 'EEEE, MMMM, d, y'}}</h2>
+        <div class="inlineboi">
+            <p class="medium">Your Log:</p>
+            <img ng-src="{{curImg}}">
+        </div>
+        <div class="modalColumn">
+        <div class="medium">Change log?</div>
+        <div class="logButtons">
+        <img src="../images/check.gif" ng-click="updateDate({goalid: curId, sof: true, date: clickedDate, value: 1})" >
+        <img src="../images/x.gif" ng-click="updateDate({goalid: curId, sof: false, date: clickedDate, value: -1})" > 
+        </div>
+        </div>
+        <a ng-click="modifyDay=false" class="bottom">close</a>
+</div>
+</div>
 
+
+<section class="goalsWrapper" ng-hide="hideSave">
+    <h1>Savings</h1>
+    <div class="goalWrapper" ng-repeat="goal in savingsGoals track by goal.id">
+        <div class="goal">
+            <img class="statusImg" src="../images/$.gif">
+            <div class-"title">{{goal.goal}}</div>
+            <div class="status">
+                    <p class="small">Total Saved:</p>
+                    <p>${{goal.progress}}/${{goal.savings_goal}}</p>
+            </div>
+            <i ng-click="goalDropdown = true" ng-hide="goalDropdown" class="fa fa-chevron-down" aria-hidden="true"></i>         
+            <i class="fa fa-chevron-up" ng-click="goalDropdown = false" ng-show="goalDropdown" aria-hidden="true"></i>  
+        </div>
+        <div class="goalInfo" ng-show="goalDropdown">
+            <div class="addToSavings">
+            Add to savings: $<input ng-model="amount" placeholder="amount">
+            <a ng-click="addSavings({addition: amount, id: goal.id})">Add</a>
+            </div>
+            <div class="status">
+            <p>Next Log: {{goal.next_log | date: 'EEEE, MMMM d'}}</p>
+            <p>End Date: {{goal.end_date | date: 'EEEE, MMMM, d, y'}}</p>
+            </div>
+            <span class="small"><a ng-click="deleteSavingsGoal(goal.id)">Delete Goal</a></span>
+        </div>
+    </div>
+</section>
+</section>
 <!-- add new goal categories -->
 
 <section class="addGoal" ng-hide="hideCategories">
     <h1>Add New Goal</h1>
-    <a ng-click="showExercise()">Exercise</a>
-    <a ng-click="showSaveMoney()">Save $$</a>
+    <div class="goalRow">
+        <div class="column category">
+        <img ng-click="showExercise()" src="../images/exercise.gif">
+        <a ng-click="showExercise()">Exercise</a>
+        </div>
+        <div class="column category">
+            <img ng-click="showSaveMoney()" src="../images/$.gif">
+            <a ng-click="showSaveMoney()">Save Money</a>
+        </div>
+    </div>
 </section>
 
 <section ng-hide="hideExercise">
@@ -118,21 +186,24 @@
 </section>
 
 <section ng-hide="hideSaveMoney">
-    <h1>Save Money Goal</h1>
+    <h1>Save Money</h1>
     What are you saving money for?
     <input type="text" ng-model="goal.goal" placeholder="e.g. car, house, rainy day">
-    <br>I need to save $<input type="number" ng-model="goal.totalSavings">
-    <br>By <input type="date" ng-model="goal.end_date">
+    <br>I need to save $<input type="number" ng-model="goal.savings_goal">
+    <br>in <input type="number" ng-model="goal.endNum">
+        <select ng-model="goal.endInc">
+            <option value="weeks">Weeks</option>
+            <option value="months">Months</option>
+        </select>
     <br>Installments:
-    <input type="number" ng-model="goal.wager" placeholder="{{}}"> per
-    <select ng-model="goal.wager_option">
-            <option value="day">Day</option>
-            <option value="week">Week</option>
-            <option value="month">Month</option>
-            <option value="paycheck">Paycheck</option>
-            <option value="overall">Overall</option>
+    <input type="number" ng-model="goal.installment_value" placeholder="{{}}"> per
+    <select ng-model="goal.installment_option">
+            <option value="days">Day</option>
+            <option value="weeks">Week</option>
+            <option value="months">Month</option>
+            <option value="2weeks">Paycheck</option>
     </select>
-    <button type="button" ng-click="addGoal(goal)">Add Goal</button>
+    <button type="button" ng-click="addSavingsGoal(goal)">Add Goal</button>
 </section>
 
 <section ng-hide="hideDiet">
