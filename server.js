@@ -191,7 +191,11 @@ app.post('/api/addSavings', (req, res, next)=>{
 
 app.post('/api/deleteGoal', (req, res, next)=>{
     const db = req.app.get('db');
-    db.delete_goal([req.body.id]).then(resp=>{
+    requestData = '';
+    requestData += req.body;
+    console.log(requestData);
+    console.log(req.body[0]);
+    db.delete_goal([req.body[0].id]).then(resp=>{
         res.json(resp);
     });
 });
@@ -229,11 +233,11 @@ app.post('/api/login', (req, res, next)=>{
     db.get_users().then((users)=>{
         const person = users.find(cur=>cur.username == username);
         if (!person) {
-            res.send({ validUser: false }).redirect('/login');
+            res.send({ validUser: false , reason: 'no user'}).redirect('/login');
             console.log('no user');
         }
         else if (person.password != password) {
-            res.send({ validUser: false });
+            res.send({ validUser: false, reason: 'wrong password'});
             console.log('wrong password');
         }
         req.session.user = person;

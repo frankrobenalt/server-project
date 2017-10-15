@@ -65,10 +65,11 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
         
         return $http.post('/api/login', user)
             .then((res)=>{
-            if (!res.data.user){
-                return 'nonono';
-            }
-              return res.data.user;                
+            if (res.data.reason){
+                return res.data.reason;
+            } else {
+              return res.data.user;   
+            }             
             });
     }
 

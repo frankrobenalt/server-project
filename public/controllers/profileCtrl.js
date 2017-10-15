@@ -1,14 +1,8 @@
 angular.module('giftApp').controller('profileCtrl', function($scope, $moment, mainSrvc, $stateParams, user, $location){
-    
-    angular.element(document).ready(function(){
-
-   
-    });
-    
     let now = $moment().format();
-    $scope.goalDropdown = false;
     $scope.goalModal = false;
     $scope.modifyDay = false;
+    
 
     if (user.data){
         $location.path('/')
@@ -122,7 +116,7 @@ angular.module('giftApp').controller('profileCtrl', function($scope, $moment, ma
     }
 
     $scope.deleteGoal = (id)=>{
-       // console.log(id);
+       console.log(id);
         mainSrvc.deleteGoal(id)
             .then((res)=>{
                 $scope.getGoals(user.id);
@@ -196,5 +190,62 @@ angular.module('giftApp').controller('profileCtrl', function($scope, $moment, ma
             $location.path('/');            
         });
     }
+    $scope.numGoals = document.getElementsByClassName("goalWrapper")
+
+  
+    angular.element(document).ready(function(){
+        
+        let goalClass = document.getElementsByClassName('goal');
+        let goalInfoBox = document.getElementsByClassName('goalInfo');
+        let goal = document.getElementsByClassName('goal');
+        let dragged;
+        for(let i=0; i<goalClass.length;i++){
+            goalClass[i].addEventListener("mouseover", ()=>{
+            goalClass[i].style.boxShadow = "0 0 21px rgba(33,33,33,.2)";
+        });
+            goalClass[i].addEventListener("mouseleave", ()=>{
+            goalClass[i].style.boxShadow = "";
+            });
+            goalClass[i].addEventListener("click", ()=>{
+                console.log(goalClass[i], i);
+                if (event.target.classList[0]==="statusImg"){
+                    return;
+                }
+                if (goalInfoBox[i].classList.length > 1){
+                    goalInfoBox[i].classList.remove("goalInfoShow");
+                } else {
+                goalInfoBox[i].classList.add("goalInfoShow");
+                }
+            });
+        }
+
+        
+
+
+    });
    
 });
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("goaldelete", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("goaldelete");
+    var goalq = document.getElementById(data);
+    goalq.classList.add("goalInfo");
+    data = Number(data.replace(/goal/, ''));
+    $.ajax('/api/deleteGoal', {
+        type: 'POST',
+        data: JSON.stringify([{id: data}]),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function() { console.log('success');},
+        error  : function() { console.log('error');}
+})
+}

@@ -11,8 +11,8 @@
 <!-- login/create profile info -->
 <section>
     <div class="loginWrapper" ng-show="showLogin">
-        <input type="text" ng-model="user.username" placeholder="username">
-        <input type="password" ng-model="user.password" placeholder="password">
+        <input id="username" type="text" ng-model="user.username" placeholder="username">
+        <input id="password" type="password" ng-model="user.password" placeholder="password">
         <a ng-click="login(user)"class="login">Log In</a>
         <!-- Navigate to home view -->
         <div>Don't have an account? - 

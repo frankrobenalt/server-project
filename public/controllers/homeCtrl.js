@@ -18,10 +18,13 @@ angular.module('giftApp').controller('homeCtrl', function($scope, mainSrvc, $loc
     $scope.login = (user)=>{
         mainSrvc.findUser(user)
             .then(response=>{
-            if (response === 'nonono'){
-
-            } else {
-                $location.path('/profile/' + response.username);
+            if (response === 'no user'){
+                document.getElementById('username').style.borderColor = 'red';
+            } else if (response === 'wrong password'){
+                document.getElementById('password').style.borderColor = 'red';
+            } 
+            else {
+               $location.path('/profile/' + response.username);
             }
             });
     }

@@ -14,7 +14,7 @@
 <section class="profileContainer"ng-show="showProfile">
     <div class="profileHeader">
         <div class="inlineboi">
-        <h1>Goals</h1><i class="fa fa-plus-square-o fa-2x" ng-click="hideCategories=false;showProfile=false"aria-hidden="true"></i>
+        <h1 id="poo">Goals</h1><i class="fa fa-plus-square-o fa-2x" ng-click="hideCategories=false;showProfile=false"aria-hidden="true"></i>
         </div>
         <h3>{{currentUser.first_name}} {{currentUser.last_name}}</h3>
     </div>
@@ -22,8 +22,8 @@
 <!-- goals -->
 
 <div class="goalsWrapper" ng-hide="hideExGoals">
-    <h1>Exercise</h1>
-    <div class="goalWrapper" ng-repeat="goal in exerciseGoals track by goal.goalid">
+    <h1>Exercise</h1><img id="delete" ondrop="drop(event)" ondragover="allowDrop(event)" src="../images/trash.gif">
+    <div class="goalWrapper" id="goal{{goal.goalid}}"ng-repeat="goal in exerciseGoals track by $index" draggable="true" ondragstart="drag(event)">
         <div class="goal" ng-hide="goalModal">
             <img class="statusImg" ng-click="goalModal=true"ng-src="{{goal.image}}">
             <div class="title">{{goal.goal}}</div> 
@@ -37,10 +37,10 @@
                 <p class="small">This week:</p>
                 <p>{{goal.progress}}/{{goal.timesperweek}}</p>
             </div>
-            <i ng-click="goalDropdown = true" ng-hide="goalDropdown" class="fa fa-chevron-down" aria-hidden="true"></i>         
-            <i class="fa fa-chevron-up" ng-click="goalDropdown = false" ng-show="goalDropdown" aria-hidden="true"></i>       
+            <!-- <i ng-click="goalDropdown = true" ng-hide="goalDropdown" class="fa fa-chevron-down" aria-hidden="true"></i>         
+            <i class="fa fa-chevron-up" ng-click="goalDropdown = false" ng-show="goalDropdown" aria-hidden="true"></i>        -->
         </div>
-            <div class="goal" ng-show="goalModal">
+            <div class="changeToday" ng-show="goalModal">
                 <img class="statusImg" ng-src="{{goal.image}}">
                 <div class="small">Change today's log?</div>
                 <div class="logButtons">
@@ -49,7 +49,7 @@
                 </div>
                 <i class="fa fa-window-close-o" ng-click="goalModal=false" aria-hidden="true"></i>
             </div> 
-            <div class="goalInfo" ng-show="goalDropdown">
+            <div class="goalInfo">
                 <div class="small inline">    
                 <span class="title">This week's logs</span>
   
@@ -150,6 +150,26 @@
             <a ng-click="showSaveMoney()">Save Money</a>
         </div>
     </div>
+    <div class="goalRow">
+            <div class="column category">
+            <img ng-click="showExercise()" src="../images/weight2.gif">
+            <a ng-click="showExercise()">Weight</a>
+            </div>
+            <div class="column category">
+                <img ng-click="showSaveMoney()" src="../images/$.gif">
+                <a ng-click="showSaveMoney()">School</a>
+            </div>
+        </div>
+        <div class="goalRow">
+                <div class="column category">
+                <img ng-click="showExercise()" src="../images/exercise.gif">
+                <a ng-click="showExercise()">Quit Habit</a>
+                </div>
+                <div class="column category">
+                    <img ng-click="showSaveMoney()" src="../images/$.gif">
+                    <a ng-click="showSaveMoney()">Start Habit</a>
+                </div>
+            </div>
 </section>
 
 <section ng-hide="hideExercise">
