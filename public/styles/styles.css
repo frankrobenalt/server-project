@@ -29,6 +29,11 @@ div {
 .small {
     font-size: 1rem;
 }
+.smaller {
+    font-size: .75rem;
+    margin-right: 15px;
+    float: left;
+}
 .medium {
     font-size: 1.5rem;
 }
@@ -100,11 +105,18 @@ h1 {
     color: rgba(182, 182, 182, 0.76);
     font-size: 2rem;
 }
+#delete {
+    height: 100px;
+}
+.deleteContainer {
+    height: 110px;
+    width: 110px;
+}
 
 /* add goal */
 
 .addGoal {
-    text-align: center; 
+    text-align: center;
 }
 
 /* modify goal */
@@ -259,15 +271,32 @@ h1 {
     box-sizing: border-box;
     padding: 10px; 
 }
+
 table {
     border-spacing: 10px;
+    text-align: center;
 }
 table img {
-    width:45px;
+    width:65px;
     margin: auto;
 }
 td p {
     font-size: .8rem;
+}
+th, td {
+    padding: 10px;
+}
+td img {
+    border-radius: 50%;
+}
+td img:hover {
+    box-shadow: 0 0 1em rgba(33, 33, 33, 0.69); 
+}
+embed {
+    border-radius: 50%;
+}
+embed:hover {
+    box-shadow: 0 0 1em rgba(33,33,33,.2);
 }
 .dropdown {
     position: relative;

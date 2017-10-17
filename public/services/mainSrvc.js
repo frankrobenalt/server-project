@@ -20,6 +20,9 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
             return res;
         })
     } 
+    this.getHistory = (goal) =>{
+        return $http.post('/api/getHistory', goal);
+    }
     this.addGoal = (goal) => {
         return $http.post('/api/addExerciseGoal', goal)
         .then(res=>{

@@ -20,10 +20,22 @@ angular.module('giftApp').config(($urlRouterProvider, $stateProvider, $momentPro
                         .catch(err => err)
                 }
             })
-            .state('createProfile', {
-                url: '/createProfile',
-                templateUrl: './views/createProfileTmpl.html',
-                controller: 'createProfileCtrl'
+            .state('addGoal', {
+                url: '/addGoal',
+                templateUrl: './views/addGoalTmpl.html',
+                controller: 'addGoalCtrl',
+                resolve: {
+                    user: mainSrvc => mainSrvc.getUser()
+                        .then(response => {
+                            var user = response.data;
+                            console.log(user);
+                            return mainSrvc.getGoals(response.data.id)
+                            .then(response=> {
+                                console.log(response.data);
+                                return {user: user, goals: response.data};
+                            })
+                        }).catch(err => err)
+                }
             })
             .state('profile', {
                 url: '/profile/:username',
@@ -32,9 +44,12 @@ angular.module('giftApp').config(($urlRouterProvider, $stateProvider, $momentPro
                 resolve: {
                     user: mainSrvc => mainSrvc.getUser()
                         .then(response => {
-                            return response.data;
-                        })
-                        .catch(err => err)              
+                            var user = response.data;
+                            return mainSrvc.getGoals(response.data.id)
+                            .then(response=> {
+                                return {user: user, goals: response.data};
+                            })
+                        }).catch(err => err)
                 }
             })
     });

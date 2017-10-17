@@ -79,12 +79,17 @@ app.use(session({
 
  const now = moment().format();
  const currentSunday = moment().day("Sunday").format("YYYY/MM/DD");
+ var msecPerMinute = 1000 * 60;  
+ var msecPerHour = msecPerMinute * 60;  
+ var mpd = msecPerHour * 24;  
+ var mpw = mpd * 7;
 
 app.post('/api/goals', (req, res, next)=>{
     let goals = {};
     const db = req.app.get('db');
     db.get_goals([req.body.id]).then(response=>{
         response.map(cur=>{
+                //console.log(cur.end_date);
                 cur.time_left = (moment(cur.end_date).diff(now, 'weeks', true)).toFixed(1);
                 if (cur.time_left < 1.4) {
                     cur.time_left = (moment(cur.end_date).diff(now, 'days')).toFixed(1);
@@ -120,8 +125,13 @@ app.post('/api/goals', (req, res, next)=>{
 
 app.post('/api/getLogs', (req, res, next)=>{
     const db = req.app.get('db');
+    // const currentSunday = moment().day("Sunday").format("YYYY/MM/DD");
+
     db.get_logs([req.body.id, currentSunday]).then(response=>{
-        //console.log(response);
+       // console.log(response);
+        if (response.length === 0){
+            return res.json({dates: [moment(currentSunday).format(), moment(currentSunday).add(1, 'days'), moment(currentSunday).add(2, 'days'), moment(currentSunday).add(3, 'days'), moment(currentSunday).add(4, 'days'), moment(currentSunday).add(5, 'days'), moment(currentSunday).add(6, 'days')]});
+        }
         let sunday = null;
         let monday = null;
         let tuesday = null;
@@ -147,6 +157,7 @@ app.post('/api/getLogs', (req, res, next)=>{
                 saturday = cur.saturday;
             }
         });
+
         res.json({
             log_data: [sunday,monday,tuesday,wednesday,thursday,friday,saturday], 
             dates: [response[0].first_day, moment(response[0].first_day).add(1, 'days'), moment(response[0].first_day).add(2, 'days'), moment(response[0].first_day).add(3, 'days'), moment(response[0].first_day).add(4, 'days'), moment(response[0].first_day).add(5, 'days'), moment(response[0].first_day).add(6, 'days')]
@@ -155,9 +166,41 @@ app.post('/api/getLogs', (req, res, next)=>{
     })
 });
 
+app.post('/api/getHistory', (req, res, next)=>{
+    const db = req.app.get('db');
+    //console.log(req.body);
+
+    let end = moment(req.body.end_date).format("YYYY/MM/DD");
+    let start = moment(req.body.date_created).format("YYYY/MM/DD");
+    let numWeeks = Math.ceil((moment(end).toDate().getTime() - moment(start).toDate().getTime())/mpw);
+    let numDays = Math.ceil((moment(end).toDate().getTime() - moment(start).toDate().getTime())/mpd);
+    let sun = moment(start).day("Sunday").format("YYYY/MM/DD");
+    let history = {
+        sundays: [sun],
+        startDate: start,
+        endDate: end,
+        numWeeks: numWeeks,
+        numDays: numDays
+    };
+    for (var i=1; i<=numWeeks; i++){
+        let newnew = moment(sun).add(i, 'weeks');
+        history.sundays.push(moment(newnew).format("YYYY/MM/DD"));
+    }
+
+    db.get_history([req.body.goalid, history.sundays[history.sundays.length-1], sun])
+    .then(response=>{
+        res.json({ log_history: response, history: history });
+    })
+    
+});
+
 app.post('/api/addExerciseGoal', (req, res, next)=>{
     const db = req.app.get('db');
-    db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, moment().format(), req.body.endDate, req.body.wager_option])
+   //console.log(req.body);
+    let end_date = moment().add(Number(req.body.numweeks), req.body.wom);
+    let nextLog = moment(now).add(1, req.body.wom);
+  //console.log(nextLog);
+    db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, moment().format(), end_date, req.body.wager_option, nextLog])
         .then((goals)=>{
             //console.log(goals);
             res.json({goals: goals});
@@ -170,7 +213,8 @@ app.post('/api/addExerciseGoal', (req, res, next)=>{
 app.post('/api/addSavingsGoal', (req, res, next)=>{
     const db = req.app.get('db');
 
-    const nextLog = moment(now).add(1, req.body.installment_option);
+    let nextLog = moment(now).add(1, req.body.installment_option);
+    //console.log(nextLog);
     if (req.body.installment_option === '2weeks'){
         nextLog = moment(now).add(2, 'weeks');
     }
@@ -183,7 +227,7 @@ app.post('/api/addSavingsGoal', (req, res, next)=>{
 
 app.post('/api/addSavings', (req, res, next)=>{
     const db = req.app.get('db');
-    console.log(req.body.addition);
+    //console.log(req.body.addition);
     db.add_to_savings([req.body.id, req.body.addition]).then(response=>{
         res.json({newsavings: response});
     })
@@ -193,8 +237,8 @@ app.post('/api/deleteGoal', (req, res, next)=>{
     const db = req.app.get('db');
     requestData = '';
     requestData += req.body;
-    console.log(requestData);
-    console.log(req.body[0]);
+    //console.log(requestData);
+    //console.log(req.body[0]);
     db.delete_goal([req.body[0].id]).then(resp=>{
         res.json(resp);
     });
@@ -218,12 +262,18 @@ app.post('/api/updateProgress', (req, res, next)=>{
 
 app.post('/api/updateDate', (req, res, next)=>{
     const db = req.app.get('db');
-    //console.log(req.body);
+   // console.log(req.body);
     if (!req.body.comments){
         req.body.comments = 'none';
     }
-    db.add_log([req.body.goalid, req.body.date, req.body.sof, req.body.comments, moment(req.body.date).day("Sunday").format("YYYY/MM/DD")])
-    .then(()=>res.json('yo'))
+    if (moment(req.body.date).format("YYYY/MM/DD") === moment().format("YYYY/MM/DD")) {
+        db.add_log([req.body.goalid, req.body.date, req.body.sof, req.body.comments, moment(req.body.date).day("Sunday").format("YYYY/MM/DD")]).then(()=>{
+        db.update_progress([req.body.goalid, req.body.sof, req.body.value, moment().format()])
+        .then(()=>res.json('yo'))
+        });
+    } else {
+        db.add_log([req.body.goalid, req.body.date, req.body.sof, req.body.comments, moment(req.body.date).day("Sunday").format("YYYY/MM/DD")]).then(()=>{res.json('yo')})
+    }
 });
 
 app.post('/api/login', (req, res, next)=>{
