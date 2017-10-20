@@ -107,15 +107,20 @@ app.post('/api/goals', (req, res, next)=>{
         });
         goals.exercise = response;
         //console.log(goals);
+        db.get_weight([req.body.id]).then(respon=>{
+            goals.weight = respon;
+        })
   
     db.get_savings_goals([req.body.id]).then(respo=>{
         respo.map(cur=>{
             if (moment(cur.next_log).isAfter(now) === false){
-                cur.num_logs++;
-                cur.next_log = moment(cur.date_created).add(cur.num_logs, cur.installment_option);
+                cur.num_logs+=2;
+                cur.next_log = moment(cur.date_created).add(cur.num_logs, 'weeks');
             }
         })
         goals.savings = respo;
+    
+   
     
     //console.log(goals);
     res.json(goals);
@@ -200,7 +205,7 @@ app.post('/api/addExerciseGoal', (req, res, next)=>{
     let end_date = moment().add(Number(req.body.numweeks), req.body.wom);
     let nextLog = moment(now).add(1, req.body.wom);
   //console.log(nextLog);
-    db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, moment().format(), end_date, req.body.wager_option, nextLog])
+    db.add_goal([req.body.goal, req.body.timesperweek, req.body.wager, req.body.id, moment().format(), end_date, 'week', nextLog, req.body.recipient])
         .then((goals)=>{
             //console.log(goals);
             res.json({goals: goals});
@@ -210,14 +215,19 @@ app.post('/api/addExerciseGoal', (req, res, next)=>{
         })
 });
 
+app.post('/api/addWeightGoal', (req, res, next)=>{
+    const db = req.app.get('db');
+    let endDate = moment().add(Number(req.body.numMonths), 'months');
+    console.log(endDate);
+    db.add_weight_goal([req.body.user_id, req.body.curWeight, req.body.goalWeight, moment().format(), endDate, req.body.wager])
+    res.json('yo');
+})
+
 app.post('/api/addSavingsGoal', (req, res, next)=>{
     const db = req.app.get('db');
-
-    let nextLog = moment(now).add(1, req.body.installment_option);
-    //console.log(nextLog);
-    if (req.body.installment_option === '2weeks'){
-        nextLog = moment(now).add(2, 'weeks');
-    }
+    let friday = moment().day("Friday").format("YYYY/MM/DD");
+    let nextLog = moment(friday).add(2, 'weeks');
+    
     const end_date = moment(now).add(req.body.endNum, req.body.endInc);
     db.add_savings_goal([req.body.installment_option, req.body.savings_goal, now, end_date, req.body.user_id, req.body.goal, req.body.installment_value, nextLog])
         .then((goals)=>{
@@ -240,6 +250,7 @@ app.post('/api/deleteGoal', (req, res, next)=>{
     //console.log(requestData);
     //console.log(req.body[0]);
     db.delete_goal([req.body[0].id]).then(resp=>{
+        console.log(resp)
         res.json(resp);
     });
 });
@@ -275,6 +286,13 @@ app.post('/api/updateDate', (req, res, next)=>{
         db.add_log([req.body.goalid, req.body.date, req.body.sof, req.body.comments, moment(req.body.date).day("Sunday").format("YYYY/MM/DD")]).then(()=>{res.json('yo')})
     }
 });
+
+app.post('/api/updateWeight', (req, res, next)=>{
+    const db = req.app.get('db');
+    let last_log = moment().format();
+    db.weight_progress([req.body.id, Number(req.body.newWeight), last_log]);
+    res.json('gooood');
+})
 
 app.post('/api/login', (req, res, next)=>{
     const username = req.body.username;

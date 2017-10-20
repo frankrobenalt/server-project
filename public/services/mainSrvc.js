@@ -29,6 +29,9 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
             return res.data;
         });
     }
+    this.addWeightGoal = (goal)=>{
+        return $http.post('/api/addWeightGoal', goal).then(res=>res);
+    }
     this.addSavingsGoal = (goal)=>{
         return $http.post('/api/addSavingsGoal', goal)
         .then(res=>{
@@ -62,6 +65,9 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
         .then(response=>{
             return response;
         });
+    }
+    this.updateWeight = (update)=>{
+        return $http.post('/api/updateWeight', update);
     }
 
     this.findUser = (user)=>{

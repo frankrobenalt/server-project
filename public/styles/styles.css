@@ -13,8 +13,15 @@ div {
 
 /* general */
 
+input {
+    height: 45px;
+    font-size: 1.25rem;
+}
+
 .title {
     align-self: center;
+    padding: 5px;
+    font-size: 1.5rem;
 }
 
 .column {
@@ -26,13 +33,26 @@ div {
 .column img {
     width: 100px;
 }
+.goalRow img {
+    width: 200px;
+}
+/* .highlight {
+} */
 .small {
     font-size: 1rem;
+    margin: 5px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.border {
+    border-left: .5px solid grey;
+    border-top: .5px solid grey;
+    border-right: .5px solid grey;
 }
 .smaller {
     font-size: .75rem;
-    margin-right: 15px;
-    float: left;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 .medium {
     font-size: 1.5rem;
@@ -47,7 +67,7 @@ div {
 .inline {
     display: flex;
     justify-content: space-around;
-    width: 96vw;
+    width: 700px;
 }
 i {
     margin: 10px;
@@ -114,9 +134,15 @@ h1 {
 }
 
 /* add goal */
-
-.addGoal {
+.boo{
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.addGoal {
+
+    width: 80%;
 }
 
 /* modify goal */
@@ -134,13 +160,14 @@ h1 {
 .modifyDay {
     position: fixed;
     top: 33%;
-    left: 5%;
-    height: 35%;
-    width: 90%;
+    left: 37.5%;
+    height: 33%;
+    width: 30%;
     background-color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
    
 }
 .modifyDay h2 {
@@ -178,10 +205,15 @@ h1 {
 }
 .goalRow {
     display: flex;
+    justify-content: center;
+}
+.goalRow img:hover {
+    border-radius: 50%;
+    box-shadow: 0 0 25px rgba(33,33,33,.2);    
 }
 .category {
-    width: 50%;
-    height: 207px;
+    width: 35%;
+    height: 30vh;
 }
 
 
@@ -213,7 +245,9 @@ h1 {
     border: 1px solidstyle color;
 }
 .goalWrapper {
-    width: 100%;
+    box-shadow: 0 0 15px rgba(33,33,33,.2);
+    width: 700px;
+    margin: 10px;
 }
 .goal {
     transition: box-shadow .3s;
@@ -260,21 +294,52 @@ h1 {
 }
 .goalInfo {
     display: none;
+    /* height: 0px; */
+    /* opacity: 0; */
 }
+/* .transform {
+    -webkit-transition: all 2s ease;  
+    -moz-transition: all 2s ease;  
+    -o-transition: all 2s ease;  
+    -ms-transition: all 2s ease;  
+    transition: all 1s;
+} */
 .goalInfoShow {
+    opacity: 1;
     display: flex;
     flex-direction: column;
     align-items: center; 
     width: 100%;
-    display: flex;
+    height: fit-content;
     background-color: #FFFFFF;  
     box-sizing: border-box;
     padding: 10px; 
 }
+.charityContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 80%;
+}
+.charity {
+    border: .5px solid grey;
+    text-align: center;
+}
+.charityList {
+    padding: 10px;
+    border-bottom: .5px solid grey;
+}
+.charityContainer input{
+    width: 500px !important;
+    text-align: center;
+}
 
 table {
-    border-spacing: 10px;
     text-align: center;
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    width: 700px;
 }
 table img {
     width:65px;
@@ -283,8 +348,13 @@ table img {
 td p {
     font-size: .8rem;
 }
+th {
+    /* border-bottom: .1px solid black; */
+    /* border-top: .1px solid black; */
+}
 th, td {
     padding: 10px;
+    /* border-bottom: .1px solid black;     */
 }
 td img {
     border-radius: 50%;
