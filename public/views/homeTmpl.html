@@ -5,22 +5,24 @@
                 <a ng-click="logOut()">Log In</a>
             </div>
         </div>
-        <h2>GoalBank</h2>
+        <h2 style="font-family:'Castellar'">GoalBank</h2>
 </section>
 
 <!-- login/create profile info -->
 <section>
     <div class="loginWrapper" ng-show="showLogin">
+        <div>
         <input id="username" type="text" ng-model="user.username" placeholder="username">
         <input id="password" type="password" ng-model="user.password" placeholder="password">
-        <a ng-click="login(user)"class="login">Log In</a>
+        </div>
+        <div class="createButtonWrapper"><a ng-click="login(user)"class="login createButton"><h1>Log In</h1></a></div>
         <!-- Navigate to home view -->
         <div>Don't have an account? - 
         <a ng-click="showCreateProfile()">Create Profile</a>
         </div>
     </div>
 </section>
-        
+
 <section class="loginWrapper" ng-show="showCreate">
     <h1>Create Profile</h1>
     <form>
@@ -29,7 +31,16 @@
     <input type="text" ng-model="user.first_name" placeholder="First Name">
     <input type="text" ng-model="user.last_name" placeholder="Last Name">
     </form>
-    <a type="submit" ng-click="createProfile(user)">Create Profile</a>
+    <h1>Add Payment Info</h1>
+    <form>
+    <input type="text" ng-model="user.card"  placeholder="Name on Card">
+    <input type="text" ng-model="user.cardnumber"  placeholder="Card #">
+    <input type="text" ng-model="user.exp" placeholder="Exp. Date">
+    <input type="text" ng-model="user.cvc" placeholder="CVC Code">
+    </form>
+    <div class="createButtonWrapper">
+    <a class="createButton" ng-click="createProfile(user)"><h1>Create Profile</h1></a>
+    </div>
 </section>
         
 <div class="footer">

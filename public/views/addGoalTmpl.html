@@ -5,17 +5,19 @@
                 <a ng-click="logOut()">Log Out</a>
             </div>
         </div>
-        <h2>GoalBank</h2>
+        <h2 style="font-family:'Castellar'">GoalBank</h2>
 </section>
 
 <!-- add new goal categories -->
+<div class="inlineback" ng-hide="hideCategories">
+        <a id="back" ui-sref="profile({username: user.username})"><h1>&#9754; Back</h1></a>
+        <div class="pad"><h1 id="sko">Add New Goal</h1></div>
+    </div>
 <div class="boo">
 <section class="addGoal" ng-hide="hideCategories">
+       
     <div class="column">
-        <div class="inlineboi">
-            <a id="back" ui-sref="profile({username: user.username})"><h1>&#9754; Back</h1></a>
-            <h1>Add New Goal</h1>
-        </div>
+        
     </div>
         <div class="goalRow">
             <div class="column category">

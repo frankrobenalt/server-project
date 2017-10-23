@@ -132,7 +132,7 @@ angular.module('giftApp').controller('profileCtrl', function($scope, mainSrvc, $
     });
     $scope.quitHabitGoals.map(cur=>{
         cur.progress=0;
-        if (cur.logged_today === false){cur.image = '../images/questionmark.gif'}
+        cur.image = '../images/questionmark.gif'
         if (cur.logged_today === true){if (cur.log_value === true){cur.image = '../images/badcheck.svg'} else {cur.image='../images/goodx.svg'}}
         mainSrvc.getHabitLogs(cur.goalid).then(res=>{
             if (!res.data.log_data) {cur.log_data = ['../images/questionmark.gif','../images/questionmark.gif','../images/questionmark.gif','../images/questionmark.gif','../images/questionmark.gif','../images/questionmark.gif','../images/questionmark.gif']} 
@@ -198,7 +198,8 @@ angular.module('giftApp').controller('profileCtrl', function($scope, mainSrvc, $
     console.log($scope.completedGoals);
     $scope.completedGoals.map(cur=>{
         if (cur.category === 'exercise'){
-            console.log('yoooo');
+            cur.image = "../images/exercise.svg";
+            
             mainSrvc.getHistory(cur).then(respoonse=>{
                 cur.total = {};
                 cur.week_total = {};
@@ -255,7 +256,52 @@ angular.module('giftApp').controller('profileCtrl', function($scope, mainSrvc, $
                     }
                 }) 
                 cur.week_total.weekCount--;                
-                cur.week_total.moneyCount = '-$' + ((cur.week_total.weekCount - cur.week_total.successCount) * cur.wager);                
+                cur.week_total.moneyCount = ((cur.week_total.weekCount - cur.week_total.successCount) * cur.wager);                
+            })
+        } else if (cur.category = 'quit habit'){
+            cur.image = "../images/badhabit.svg";
+            mainSrvc.getHabitHistory(cur).then(response =>{
+                cur.total = {};
+                cur.week_total = {};            
+            
+                var day = moment(response.data.history.sundays[0]).toDate();
+                var dow = moment(response.data.history.startDate).toDate().getDay();
+    
+                var start = moment(response.data.history.startDate).format('MMM D YYYY');
+                start = moment(start).toDate().getTime();
+                var end = moment(response.data.history.endDate).format('MMM D YYYY');
+                end = moment(end).toDate().getTime();
+    
+                var numDays = response.data.history.sundays.length * 7;
+                var calendar = [moment(day).format('MMM D')];
+                var history = [];
+    
+                for (var p=1;p<=numDays;p++){
+                    var days = moment(day).add(p, 'days');
+                    calendar.push(moment(days).format('MMM D, YYYY'));
+                    var now = moment(days).format('MMM D');
+                }
+    
+                let log_dates = [];
+                let values = [];
+                cur.total.trueCount = 0;
+                cur.total.falseCount = 0;
+                cur.total.totalCount = 0;
+                cur.week_total.successCount = 0;
+                cur.week_total.weekCount = 0;
+                cur.week_total.moneyCount = 0;
+    
+                response.data.log_history.map(current=>{
+                    log_dates.push(moment(current.log_date).format('MMM D, YYYY'));
+                    values.push(current.log_value);
+                    if (current.log_value === true){
+                        cur.total.trueCount++
+                    }
+                    if (current.log_value === false){
+                        cur.total.falseCount++
+                    }
+                });
+                cur.week_total.moneyCount = cur.total.trueCount * cur.wager;
             })
         }
     })
@@ -590,6 +636,22 @@ angular.module('giftApp').controller('profileCtrl', function($scope, mainSrvc, $
         info.classList.toggle("goalInfoShow");
         // if (info.classList.length > 1){info.classList.remove("goalInfoShow")} else {info.classList.add("goalInfoShow")}
     }
+    $scope.changeFocus = (event)=>{
+        if (event.currentTarget.classList[0] === 'button'){
+            event.currentTarget.classList.remove('button');
+            event.currentTarget.classList.add('buttonFocus');
+        }
+        if (event.currentTarget.id === "currentButton" || event.target.id === 'currentButton'){
+            var change = document.getElementById("completedButton");
+            change.classList.remove("buttonFocus");
+            change.classList.add("button");
+        }
+        if (event.currentTarget.id === "completedButton" || event.target.id === 'completedButton'){
+            var change = document.getElementById("currentButton");
+            change.classList.remove("buttonFocus");
+            change.classList.add("button");
+        }
+    }
 
     $scope.dropdown=()=>{document.getElementById("myDropdown").classList.toggle("show")}
 
@@ -602,11 +664,9 @@ angular.module('giftApp').controller('profileCtrl', function($scope, mainSrvc, $
         for(let i=0; i<goalClass.length;i++){
             goalClass[i].addEventListener("mouseover", ()=>{
             goalClass[i].style.boxShadow = "0 0 31px rgba(33,33,33,.2)";
-            goalClass[i].style.marginBottom = "2px";
         });
             goalClass[i].addEventListener("mouseleave", ()=>{
             goalClass[i].style.boxShadow = "0 0 15px rgba(33,33,33,.2)";
-            goalClass[i].style.marginBottom = "0px";
             });
         }});
 });

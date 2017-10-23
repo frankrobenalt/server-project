@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Raleway', sans-serif;
+    text-decoration: none;
 }
 html {
     position: relative;
@@ -9,7 +10,8 @@ html {
 }
 body {
     background-color: #F2F2F2;
-    margin-bottom: 120px;
+    margin-bottom: 150px;
+    text-align: center;
 }
 div {
     box-sizing: border-box;
@@ -46,7 +48,7 @@ input {
     width: 100px;
 }
 .goalRow img {
-    width: 200px;
+    width: 400px;
 }
 /* .highlight {
 } */
@@ -113,6 +115,7 @@ font-family: 'Playball', cursive; */
 .loginWrapper input {
     text-align: center;
     margin: 10px;
+    width: 50%;
 }
 
 /* nav */
@@ -170,12 +173,22 @@ h1 {
     margin: 30px;
     color: rgba(182, 182, 182, 0.76);
     font-size: 2rem;
+    
+}
+.pad {
+    padding-right: 120px;
+}
+.inlineback {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
 }
 #back {
-    position: fixed;
+    float: left;
+    /* position: fixed;
     top: 7.5%;
     left: 5%;
-    text-decoration: none;
+    text-decoration: none; */
 }
 
 #delete {
@@ -183,23 +196,23 @@ h1 {
 }
 .deleteContainer {
     position: fixed;
-    top:8%;
+    top:10%;
     right:2.5%;
     height: 110px;
     width: 110px;
 }
 #add {
     border-radius: 50%;
-    width:100px;
-    height:100px;
+    width:50px;
+    height:50px;
 }
-.addContainer {
+/*.addContainer {
     position: fixed;
     top:8%;
     right:11%;
     height: 110px;
     width: 110px;
-}
+} */
 #add:hover {
     box-shadow: 0 0 25px rgba(33,33,33,.2);    
 }
@@ -214,6 +227,44 @@ h1 {
 .addGoal {
 
     width: 80%;
+}
+/* button h1 {
+    
+} */
+.createButtonWrapper {
+    display: flex;
+    justify-content: center;
+}
+.createButton {
+    background-color: #2E4C31;
+    margin: 20px;    
+    width: 300px;
+}
+.createButton h1{
+    font-size:1.5rem;
+    color:white;
+    margin: 10px;    
+}
+.button {
+    background-color: #2E4C31;
+    margin: 10px;    
+    color:transparent;
+}
+.buttonFocus {
+    background-color: #2E4C31;
+    margin: 10px;   
+    padding: 5px; 
+    box-shadow:  0 0 25px rgba(33,33,33,.2);    
+}
+.button h1 {
+    margin: 20px;
+    font-size: 1.5rem;
+}
+.buttonFocus h1 {
+    color:white;
+    
+    margin: 20px;
+    font-size: 1.5rem;
 }
 
 
@@ -279,10 +330,7 @@ h1 {
     display: flex;
     justify-content: space-around;
 }
-.goalRow img:hover {
-    border-radius: 50%;
-    box-shadow: 0 0 25px rgba(33,33,33,.2);    
-}
+
 .category {
     width: 35%;
     height: 30vh;
@@ -447,7 +495,6 @@ embed:hover {
     box-shadow: 0 0 1em rgba(33,33,33,.2);
 }
 
-
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
@@ -469,3 +516,80 @@ embed:hover {
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #f1f1f1}
 .show {display:block;}
+
+@media (max-width : 1200px) {
+    #delete {
+        display: none;
+    }
+    .goalWrapper {
+        box-shadow: 0 0 15px rgba(33,33,33,.2);
+        width: 100%;
+        margin: 10px;
+    }
+}
+@media (max-width : 700px) {
+    .status {
+        font-size: .5rem;
+    }
+    .number {
+        font-size: 1rem;
+    }
+    .inline {
+        width: 100%;
+    }
+    table {
+        text-align: center;
+        -webkit-border-horizontal-spacing: 0px;
+        -webkit-border-vertical-spacing: 0px;
+        width: 100%;
+    }
+    table img {
+        width:100%;
+        margin: auto;
+    }
+    tr img {
+        width: 100%;
+        margin: auto;
+    }
+    td p {
+        font-size: .8rem;
+    }
+    th {
+        /* border-bottom: .1px solid black; */
+        /* border-top: .1px solid black; */
+    }
+    th, td {
+        padding: 10px;
+        /* border-bottom: .1px solid black;     */
+    }
+    td img {
+        border-radius: 50%;
+    }
+    td img:hover {
+        box-shadow: 0 0 1em rgba(33, 33, 33, 0.69); 
+    }
+    .goalRow img {
+        width: 300px;
+    }
+    .goalRow {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .goalRow img:hover {
+        border-radius: 50%;   
+    }
+    .category {
+        margin: 30px;
+        width:100%;
+        overflow: wrap;
+    }
+ 
+    #sko {
+        display: none;
+    }
+    /* div {
+        font-size: .5rem;
+    } */
+}

@@ -8,7 +8,7 @@ angular.module('giftApp').controller('homeCtrl', function($scope, mainSrvc, $loc
         $location.path('/profile/' + user.username);
     }
     $scope.showLogin = true;
-    
+
 
     $scope.showCreateProfile = ()=>{
         $scope.showCreate = true;
@@ -30,6 +30,7 @@ angular.module('giftApp').controller('homeCtrl', function($scope, mainSrvc, $loc
     }
 
     $scope.createProfile = (user)=>{
+        if (!user.username || !user.password || !user.first_name || !user.last_name || !user.card || !user.cardnumber || !user.exp || !user.cvc){return}
         mainSrvc.createProfile(user);
         $timeout(()=>{
         $scope.login({username: user.username, password: user.password });

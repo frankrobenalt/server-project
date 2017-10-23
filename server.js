@@ -305,7 +305,7 @@ app.post('/api/addSchoolGoal', (req, res, next)=>{
 app.post('/api/addQuitHabitGoal', (req, res, next)=>{
     const db = req.app.get('db');
     var endDate = moment().add(Number(req.body.numMonths), 'months');
-    db.add_quit_habit([req.body.goal, req.body.id, moment().format(), endDate, req.body.wager, req.body.recipient])
+    db.add_quit_habit([req.body.goal, req.body.user_id, moment().format(), endDate, req.body.wager, req.body.recipient])
     res.json('yo');
 })
 
@@ -334,7 +334,7 @@ app.post('/api/deleteGoal', (req, res, next)=>{
     requestData = '';
     requestData += req.body;
     //console.log(requestData);
-    //console.log(req.body[0]);
+    console.log(req.body[0]);
     db.delete_goal([req.body[0].id]).then(resp=>{
         res.json(resp);
     });
