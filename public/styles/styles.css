@@ -2,16 +2,28 @@
     margin: 0;
     padding: 0;
     font-family: 'Raleway', sans-serif;
-   
+}
+html {
+    position: relative;
+    min-height: 100%;
 }
 body {
-    background-color: #F7F7F7;
+    background-color: #F2F2F2;
+    margin-bottom: 120px;
 }
 div {
     box-sizing: border-box;
 }
 
 /* general */
+
+button {
+    background-color: #C7C7C7;
+    height: 35px;
+    margin: 20px;
+    padding: 5px;
+    border: none;
+}
 
 input {
     height: 45px;
@@ -56,6 +68,8 @@ input {
 }
 .medium {
     font-size: 1.5rem;
+    margin: 15px;
+    text-align: center;
 }
 .large {
     font-size: 2rem;
@@ -67,8 +81,11 @@ input {
 .inline {
     display: flex;
     justify-content: space-around;
-    width: 700px;
+    align-items: center;
+    width: 800px;
+    padding: 20px;
 }
+
 i {
     margin: 10px;
 }
@@ -103,12 +120,41 @@ font-family: 'Playball', cursive; */
 .nav {
     width: 100%;
     display: flex;
+    align-items: center;
     text-align: center;
-    color: white;
+    color: #F2F2F2;
     background-color: rgb(46, 76, 49);
+    height: 69px;
 }
 .nav h2 {
-    margin: auto;
+    margin: auto; 
+    color: #F2F2F2;
+    font-size: 2rem;
+    padding-right: 30px;
+}
+
+.footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+    overflow:hidden;
+    /* position: fixed;
+    right:0;
+    bottom:0; */
+    margin-top: 30px;
+    background-color: #2E4C31;
+    text-align: center;
+    padding: 10px;
+    color: white;
+}
+.footer a{
+    margin: 15px;
+    color: white;
+}
+.footer div{
+    margin: 15px;
 }
 
 /* profile header */
@@ -121,16 +167,41 @@ font-family: 'Playball', cursive; */
     align-items: center;
 }
 h1 {
-    margin: 10px;
+    margin: 30px;
     color: rgba(182, 182, 182, 0.76);
     font-size: 2rem;
 }
+#back {
+    position: fixed;
+    top: 7.5%;
+    left: 5%;
+    text-decoration: none;
+}
+
 #delete {
     height: 100px;
 }
 .deleteContainer {
+    position: fixed;
+    top:8%;
+    right:2.5%;
     height: 110px;
     width: 110px;
+}
+#add {
+    border-radius: 50%;
+    width:100px;
+    height:100px;
+}
+.addContainer {
+    position: fixed;
+    top:8%;
+    right:11%;
+    height: 110px;
+    width: 110px;
+}
+#add:hover {
+    box-shadow: 0 0 25px rgba(33,33,33,.2);    
 }
 
 /* add goal */
@@ -144,6 +215,7 @@ h1 {
 
     width: 80%;
 }
+
 
 /* modify goal */
 .goalModalWrapper {
@@ -205,7 +277,7 @@ h1 {
 }
 .goalRow {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
 }
 .goalRow img:hover {
     border-radius: 50%;
@@ -246,7 +318,7 @@ h1 {
 }
 .goalWrapper {
     box-shadow: 0 0 15px rgba(33,33,33,.2);
-    width: 700px;
+    width: 800px;
     margin: 10px;
 }
 .goal {
@@ -291,6 +363,7 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 15px;
 }
 .goalInfo {
     display: none;
@@ -335,6 +408,11 @@ h1 {
     text-align: center;
 }
 
+.calContainer {
+    height: 700px;
+    overflow: scroll;
+}
+
 table {
     text-align: center;
     -webkit-border-horizontal-spacing: 0px;
@@ -368,10 +446,7 @@ embed {
 embed:hover {
     box-shadow: 0 0 1em rgba(33,33,33,.2);
 }
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
+
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {

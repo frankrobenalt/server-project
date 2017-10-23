@@ -1,0 +1,1 @@
+INSERT INTO school(user_id, goal, start_date, end_date, wager, recipient) VALUES ($1, $2, $3, $4, $5, $6);

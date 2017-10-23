@@ -1,0 +1,1 @@
+SELECT * FROM school WHERE user_id = $1;

@@ -20,8 +20,17 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
             return res;
         })
     } 
+    this.getHabitLogs = (id) =>{
+        return $http.post('/api/getHabitLogs', {id: id})
+        .then(res=>{
+            return res;
+        })
+    } 
     this.getHistory = (goal) =>{
         return $http.post('/api/getHistory', goal);
+    }
+    this.getHabitHistory = (goal) =>{
+        return $http.post('/api/getHabitHistory', goal);
     }
     this.addGoal = (goal) => {
         return $http.post('/api/addExerciseGoal', goal)
@@ -38,36 +47,32 @@ angular.module('giftApp').service('mainSrvc', function($http, $rootScope) {
             return res.data;
         });
     }
+    this.addSchoolGoal = (goal)=>{
+        return $http.post('/api/addSchoolGoal', goal).then(res=>res);
+    }
+    this.addQuitHabitGoal = (goal)=>{
+        return $http.post('/api/addQuitHabitGoal', goal).then(res=>res);        
+    }
     this.addSavings = (addition)=>{
-        return $http.post('/api/addSavings', addition).then(res=>{
-            return res;
-        });
+        $http.post('/api/addSavings', addition);
     }
 
     this.deleteGoal = (id)=>{
-        return $http.post('/api/deleteGoal', {id: id})
-        .then(res=>{
-            return res;
-        });
+        $http.post('/api/deleteGoal', {id: id});
     }
     this.deleteSavingsGoal = (id)=>{
-        return $http.post('/api/deleteSavingsGoal', {id: id})
-        .then(res=>{
-            return res;
-        });
+        $http.post('/api/deleteSavingsGoal', {id: id});
     }
 
     this.updateProgress = (progress)=>{
-        return $http.post('/api/updateProgress', progress).then(res=>res);
+        $http.post('/api/updateProgress', progress);
     }
-    this.updateDate = (update)=>{
-        return $http.post('/api/updateDate', update)
-        .then(response=>{
-            return response;
-        });
+    this.updateBadHabitProgress = (progress)=>{
+        $http.post('/api/updateBadHabit', progress);
     }
+    this.updateDate = (update)=>$http.post('/api/updateDate', update);
     this.updateWeight = (update)=>{
-        return $http.post('/api/updateWeight', update);
+        $http.post('/api/updateWeight', update);
     }
 
     this.findUser = (user)=>{

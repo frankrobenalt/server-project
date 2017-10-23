@@ -8,8 +8,10 @@ angular.module('giftApp').controller('addGoalCtrl', function($scope, mainSrvc, u
     $scope.hideCategories = false;
     $scope.hideExercise = true;
     $scope.hideSaveMoney = true;
+    $scope.hideSchool = true;
     $scope.hideDiet = true;
     $scope.hideWeight = true;
+    $scope.hideQuitHabit = true;
     $scope.charities = charities;
 
 
@@ -43,6 +45,22 @@ angular.module('giftApp').controller('addGoalCtrl', function($scope, mainSrvc, u
             $location.path('/profile/' + user.username);
         })
     }
+    $scope.addSchoolGoal = (goal)=>{
+        $scope.hideSchool = true;
+        goal.user_id = user.id;
+        mainSrvc.addSchoolGoal(goal).then(res=>{
+            $location.path('/profile/'+user.username);
+        })
+
+    }
+
+$scope.addQuitHabitGoal = (goal)=>{
+    goal.user_id = user.id;    
+    mainSrvc.addQuitHabitGoal(goal).then(res=>{
+        $location.path('/profile/'+user.username);
+        
+    })
+}
 
     $scope.showDiet = ()=>{
         $scope.hideCategories = true;
@@ -59,6 +77,15 @@ angular.module('giftApp').controller('addGoalCtrl', function($scope, mainSrvc, u
         $scope.hideSaveMoney = false;
     }
 
+    $scope.showSchool = () => {
+        $scope.hideSchool = false;
+        $scope.hideCategories = true;
+    }
+    $scope.showQuitHabit = () => {
+        $scope.hideQuitHabit = false;
+        $scope.hideCategories = true;
+    }
+
     $scope.dropdown=()=>{
         document.getElementById("myDropdown").classList.toggle("show");
     }
@@ -68,13 +95,15 @@ angular.module('giftApp').controller('addGoalCtrl', function($scope, mainSrvc, u
         });
     }
     $scope.fillCharity = (charity)=>{
-        var char = document.getElementById("charity");
-        char.classList.add("goalInfo");
+        var char = document.getElementsByClassName("charityList");
+        for (let i=0; i<char.length; i++){
+            char[i].classList.add("goalInfo");
+        }
         $scope.goal.recipient = charity;
     }
     angular.element(document).ready(function(){
-        $('#charitySearch').keyup(function(){
-            $("#charity").removeClass("goalInfo");
+        $('[id="charitySearch"]').keyup(function(){
+            $('[id="charity"]').removeClass("goalInfo");
         })
     })
 });

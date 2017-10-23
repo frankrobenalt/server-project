@@ -13,7 +13,7 @@
 <section class="addGoal" ng-hide="hideCategories">
     <div class="column">
         <div class="inlineboi">
-            <a ui-sref="profile({username: user.username})">Back</a>
+            <a id="back" ui-sref="profile({username: user.username})"><h1>&#9754; Back</h1></a>
             <h1>Add New Goal</h1>
         </div>
     </div>
@@ -33,18 +33,18 @@
                 <h1 ng-click="showDiet()">Weight</h1>
                 </div>
                 <div class="column category">
-                    <img ng-click="showSaveMoney()" src="../images/$.gif">
-                    <a ng-click="showSaveMoney()">School</a>
+                    <img ng-click="showSchool()" src="../images/school.svg">
+                    <h1 ng-click="showSchool()">School</h1>
                 </div>
             </div>
             <div class="goalRow">
                     <div class="column category">
-                    <img ng-click="showExercise()" src="../images/exercise.gif">
-                    <a ng-click="showExercise()">Quit Habit</a>
+                    <img ng-click="showQuitHabit()" src="../images/badhabit.svg">
+                    <h1 ng-click="showQuitHabit()">Quit Habit</h1>
                     </div>
                     <div class="column category">
-                        <img ng-click="showSaveMoney()" src="../images/$.gif">
-                        <a ng-click="showSaveMoney()">Start Habit</a>
+                        <img ng-click="showSaveMoney()" src="../images/starthabit.svg">
+                        <h1 ng-click="showSaveMoney()">Start Habit</h1>
                     </div>
                 </div>
     </section>
@@ -178,7 +178,7 @@
                                             <br><div>
                                             <input id="charitySearch" type="text" style="width:100%" ng-model="goal.recipient" placeholder="i.e. St. Jude's, Am. Kidney Fund, etc.">
                                             <div class="goalInfo charity" id="charity">
-                                            <div class="charityList"ng-repeat="charity in charities | filter:goal.recipient">
+                                            <div class="charityList" ng-repeat="charity in charities | filter:goal.recipient">
                                                 <div ng-click="fillCharity(charity)" >
                                             {{charity}}
                                                 </div>
@@ -192,9 +192,89 @@
                 </div>
             </div>
     </section>
+
+    <div class="goalsWrapper" ng-hide="hideSchool">
+            <h1>School Goal</h1>
+            <div class="goalWrapper">
+                <div class="goal">
+                    <div>
+                        Goal:
+                        <input type="text" ng-model="goal.goal" placeholder="e.g. all A's, goal GPA, etc.">
+                    </div>
+                        <div>
+                            End Date:<input type="date" ng-model="goal.end_date">
+                        </div>
+                </div>  
+                    <div class="goalInfoShow">
+                        <div class="wager">
+                            <h2>Wager</h2>
+                            <div class="inlineboi">
+                            <br><div>$
+                            <input type="integer" style="width:75px" ng-model="goal.wager">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="charityContainer">
+                            <h2>Recipient</h2>
+                            <div class="inlineboi">
+                            <br><div>
+                            <input id="charitySearch" type="text" style="width:100%" ng-model="goal.recipient" placeholder="i.e. St. Jude's, Am. Kidney Fund, etc.">
+                            <div class="goalInfo charity" id="charity">
+                            <div class="charityList" ng-repeat="charity in charities | filter:goal.recipient">
+                                <div ng-click="fillCharity(charity)" >
+                            {{charity}}
+                                </div>
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a type="button" ng-click="addSchoolGoal(goal)">Add Goal</a>
+                    </div>
+            </div>
+        </div>
+        </div>
             
-    <section ng-hide="hideQuitHabit">
-                    
+    <section >
+            <div class="goalsWrapper" ng-hide="hideQuitHabit">
+                    <h1>Quit Habit</h1>
+                    <div class="goalWrapper">
+                        <div class="goal">
+                            <div>
+                                Bad Habit:
+                                <input type="text" ng-model="goal.goal" placeholder="e.g. smoking, alcohol, soda, biting nails">
+                            </div>
+                                <div>
+                                    End Date:<input type="text" style="width:75px" ng-model="goal.numMonths" placeholder="number">Months
+                                </div>
+                        </div>  
+                            <div class="goalInfoShow">
+                                <div class="wager">
+                                    <h2>Wager</h2>
+                                    <div class="inlineboi">
+                                    <br><div>$
+                                    <input type="integer" style="width:75px" ng-model="goal.wager">/day
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="charityContainer">
+                                    <h2>Recipient</h2>
+                                    <div class="inlineboi">
+                                    <br><div>
+                                    <input id="charitySearch" type="text" style="width:100%" ng-model="goal.recipient" placeholder="i.e. St. Jude's, Am. Kidney Fund, etc.">
+                                    <div class="goalInfo charity" id="charity">
+                                    <div class="charityList" ng-repeat="charity in charities | filter:goal.recipient">
+                                        <div ng-click="fillCharity(charity)" >
+                                    {{charity}}
+                                        </div>
+                                    </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a type="button" ng-click="addQuitHabitGoal(goal)">Add Goal</a>
+                            </div>
+                    </div>
+                </div>
+                </div>   
     </section>
     <!-- 
     <section ng-show="showStartHabit">
@@ -204,4 +284,13 @@
     <input type="number" max="10000" ng-model="goal.wager" placeholder="Wager?">
     <button type="button" ng-click="addGoal(goal)">Add Goal</button>
     </section> -->
-    
+    <div class="footer">
+            <div class-"inline">
+                <a href="">Help</a>
+                <a href="">FAQ</a>
+                <a href="">Contact</a>
+            </div>
+            <div>
+                Site by Frank Robenalt 2017
+            </div>
+            </div>

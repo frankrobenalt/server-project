@@ -119,11 +119,18 @@ app.post('/api/goals', (req, res, next)=>{
             }
         })
         goals.savings = respo;
-    
+
+    db.get_school_goals([req.body.id]).then(roospoonse=>{
+        goals.school = roospoonse;
+        db.get_quit_habit([req.body.id]).then(resy=>{
+            goals.quit_habit = resy;
+            res.json(goals);
+        })
+      
+    })
    
     
-    //console.log(goals);
-    res.json(goals);
+   
     });
 });
 })
@@ -170,6 +177,46 @@ app.post('/api/getLogs', (req, res, next)=>{
         
     })
 });
+app.post('/api/getHabitLogs', (req, res, next)=>{
+    const db = req.app.get('db');
+    // const currentSunday = moment().day("Sunday").format("YYYY/MM/DD");
+
+    db.get_habit_logs([req.body.id, currentSunday]).then(response=>{
+        if (response.length === 0){
+            return res.json({dates: [moment(currentSunday).format(), moment(currentSunday).add(1, 'days'), moment(currentSunday).add(2, 'days'), moment(currentSunday).add(3, 'days'), moment(currentSunday).add(4, 'days'), moment(currentSunday).add(5, 'days'), moment(currentSunday).add(6, 'days')]});
+        }
+        let sunday = null;
+        let monday = null;
+        let tuesday = null;
+        let wednesday = null;
+        let thursday = null;
+        let friday = null;
+        let saturday = null;
+        response.map(cur=>{
+
+            if (cur.sunday || cur.sunday === false){
+                sunday = cur.sunday;
+            } else if (cur.monday || cur.monday === false){
+                monday = cur.monday;
+            } else if (cur.tuesday || cur.tuesday === false){
+                tuesday = cur.tuesday;
+            } else if (cur.wednesday || cur.wednesday === false){
+                wednesday = cur.wednesday;
+            } else if (cur.thursday || cur.thursday === false){
+                thursday = cur.thursday;
+            } else if (cur.friday || cur.friday === false){
+                friday = cur.friday;
+            } else if (cur.saturday || cur.saturday === false){
+                saturday = cur.saturday;
+            }
+        });
+        res.json({
+            log_data: [sunday,monday,tuesday,wednesday,thursday,friday,saturday], 
+            dates: [response[0].first_day, moment(response[0].first_day).add(1, 'days'), moment(response[0].first_day).add(2, 'days'), moment(response[0].first_day).add(3, 'days'), moment(response[0].first_day).add(4, 'days'), moment(response[0].first_day).add(5, 'days'), moment(response[0].first_day).add(6, 'days')]
+        });
+        
+    })
+});
 
 app.post('/api/getHistory', (req, res, next)=>{
     const db = req.app.get('db');
@@ -198,6 +245,32 @@ app.post('/api/getHistory', (req, res, next)=>{
     })
     
 });
+app.post('/api/getHabitHistory', (req, res, next)=>{
+    const db = req.app.get('db');
+
+    let end = moment(req.body.end_date).format("YYYY/MM/DD");
+    let start = moment(req.body.date_created).format("YYYY/MM/DD");
+    let numWeeks = Math.ceil((moment(end).toDate().getTime() - moment(start).toDate().getTime())/mpw);
+    let numDays = Math.ceil((moment(end).toDate().getTime() - moment(start).toDate().getTime())/mpd);
+    let sun = moment(start).day("Sunday").format("YYYY/MM/DD");
+    let history = {
+        sundays: [sun],
+        startDate: start,
+        endDate: end,
+        numWeeks: numWeeks,
+        numDays: numDays
+    };
+    for (var i=1; i<=numWeeks; i++){
+        let newnew = moment(sun).add(i, 'weeks');
+        history.sundays.push(moment(newnew).format("YYYY/MM/DD"));
+    }
+
+    db.get_habit_history([req.body.goalid, history.sundays[history.sundays.length-1], sun])
+    .then(response=>{
+        res.json({ log_history: response, history: history });
+    })
+    
+});
 
 app.post('/api/addExerciseGoal', (req, res, next)=>{
     const db = req.app.get('db');
@@ -218,8 +291,21 @@ app.post('/api/addExerciseGoal', (req, res, next)=>{
 app.post('/api/addWeightGoal', (req, res, next)=>{
     const db = req.app.get('db');
     let endDate = moment().add(Number(req.body.numMonths), 'months');
-    console.log(endDate);
-    db.add_weight_goal([req.body.user_id, req.body.curWeight, req.body.goalWeight, moment().format(), endDate, req.body.wager])
+    db.add_weight_goal([req.body.user_id, req.body.curWeight, req.body.goalWeight, moment().format(), endDate, req.body.wager, req.body.recipient])
+    res.json('yo');
+})
+
+app.post('/api/addSchoolGoal', (req, res, next)=>{
+    const db = req.app.get('db');
+    console.log(req.body.id);
+    db.add_school_goal([req.body.user_id, req.body.goal, moment().format(), req.body.end_date, req.body.wager, req.body.recipient])
+    res.json('yo');
+})
+
+app.post('/api/addQuitHabitGoal', (req, res, next)=>{
+    const db = req.app.get('db');
+    var endDate = moment().add(Number(req.body.numMonths), 'months');
+    db.add_quit_habit([req.body.goal, req.body.id, moment().format(), endDate, req.body.wager, req.body.recipient])
     res.json('yo');
 })
 
@@ -250,7 +336,6 @@ app.post('/api/deleteGoal', (req, res, next)=>{
     //console.log(requestData);
     //console.log(req.body[0]);
     db.delete_goal([req.body[0].id]).then(resp=>{
-        console.log(resp)
         res.json(resp);
     });
 });
@@ -270,6 +355,13 @@ app.post('/api/updateProgress', (req, res, next)=>{
     db.update_progress([req.body.goalid, req.body.sof, req.body.value, moment().format()]).then(()=>res.json('yo'))
     });
 });
+
+app.post('/api/updateBadHabit', (req, res, next)=>{
+    const db = req.app.get('db');
+    db.add_bad_habit_log([req.body.goalid, moment().format(), req.body.sof, currentSunday]).then(()=>{
+        res.json('yo');
+    })
+})
 
 app.post('/api/updateDate', (req, res, next)=>{
     const db = req.app.get('db');

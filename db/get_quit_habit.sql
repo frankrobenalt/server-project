@@ -1,0 +1,1 @@
+SELECT * FROM quit_habit WHERE user_id = $1;
