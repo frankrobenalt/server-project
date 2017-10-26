@@ -9,12 +9,12 @@ const moment = require('moment');
 
 
 const { secret } = require('./config').session;
-const { dbUser, dbPass, db } = require('./config').db;
+const { connectString } = require('./config').db;
 const { domain, clientID, clientSecret } = require('./config').auth0;
 
 const port = 3000;
 
-const connectionString = `postgres://${dbUser}:${dbPass}@localhost/${db}`;
+const connectionString = connectString;
 
 const app = express();
 
