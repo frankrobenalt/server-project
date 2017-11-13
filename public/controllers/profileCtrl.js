@@ -33,7 +33,7 @@ angular.module('giftApp').controller('profileCtrl', function($scope, mainSrvc, $
     if ($scope.schoolGoals.length < 1){$scope.hideSchool = true}
     if ($scope.quitHabitGoals.length < 1){$scope.hideQuitHabit = true}
     $scope.exerciseGoals.map((cur, idx)=>{
-        var momentSucks = moment(cur.end_date).format('MMM D');
+        var momentSucks = moment(cur.end_date).format('MMM D YYYY');
         var checkTime = moment(momentSucks).toDate().getTime()
         if (todayMilli - checkTime >= 0) {
             $scope.completedGoals.push(cur);
