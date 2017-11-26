@@ -117,7 +117,7 @@ angular.module('giftApp').controller('profileCtrl', function($scope, mainSrvc, $
                             cur.total.totalCount++;
                     }
                 }) 
-                cur.week_total.weekCount--;                
+                cur.week_total.weekCount;                
                 cur.week_total.moneyCount = '-$' + ((cur.week_total.weekCount - cur.week_total.successCount) * cur.wager);                
             })
             
